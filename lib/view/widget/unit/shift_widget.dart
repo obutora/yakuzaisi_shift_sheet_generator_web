@@ -4,14 +4,15 @@ import 'package:yakuzaisi_shift_sheet_generator_web/provider/shift_provider.dart
 import '../../../const.dart';
 import '../../../entity/shift.dart';
 
-List<Widget> monthShiftWidget(Shift shift, ShiftNotifier notifier, int index) {
+List<Widget> monthShiftWidget(
+    Shift shift, ShiftNotifier notifier, int index, int minus) {
   //indexは月火水木金土日の7個が最初に含まれるため0を含む6を引く
 
-  final ShiftValue shiftValue = shift.shiftTable![index - 7].value;
+  final ShiftValue shiftValue = shift.shiftTable![index - minus].value;
 
   return [
     Text(
-      '${shift.date.month}/${index - 6}',
+      '${shift.date.month}/${index - (minus - 1)}',
       style: kCaption.copyWith(color: kPcolor1),
     ),
     const SizedBox(height: 4),
@@ -20,7 +21,7 @@ List<Widget> monthShiftWidget(Shift shift, ShiftNotifier notifier, int index) {
         // print(value);
         // print(index - 7);
 
-        notifier.changeShiftBlock(index - 7, value);
+        notifier.changeShiftBlock(index - minus, value);
       },
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),

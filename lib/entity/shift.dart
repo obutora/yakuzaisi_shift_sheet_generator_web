@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/const.dart';
 
@@ -65,10 +63,10 @@ extension ShiftValueName on ShiftValue {
 }
 
 class ShiftBlock {
-  final String? dateName;
+  final DateTime? date;
   final ShiftValue value;
 
-  ShiftBlock({this.dateName, required this.value});
+  ShiftBlock({this.date, required this.value});
 }
 
 class Shift {

@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/const.dart';
+import 'package:yakuzaisi_shift_sheet_generator_web/provider/shift_provider.dart';
+
+import '../decoration/card_box_decoration.dart';
 
 class StandardTextInputField extends StatelessWidget {
   const StandardTextInputField({
@@ -37,6 +40,71 @@ class StandardTextInputField extends StatelessWidget {
             color: kPcolorTint3,
           ),
         ),
+      ),
+    );
+  }
+}
+
+class TextForm extends StatelessWidget {
+  const TextForm({
+    Key? key,
+    required this.shiftNotifier,
+  }) : super(key: key);
+
+  final ShiftNotifier shiftNotifier;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: kCardDecoration(),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'お名前',
+            style: kCaption.copyWith(color: kPcolorTint3),
+          ),
+          StandardTextInputField(
+            hintText: '薬剤 氏名',
+            onChanged: (value) => shiftNotifier.changeName(value),
+          ),
+          const SizedBox(height: 40),
+          Text(
+            'ふりがな',
+            style: kCaption.copyWith(color: kPcolorTint3),
+          ),
+          StandardTextInputField(
+            hintText: 'やくざい しめい',
+            onChanged: (value) => shiftNotifier.changeRuby(value),
+          ),
+          const SizedBox(height: 40),
+          Text(
+            '薬局のお名前',
+            style: kCaption.copyWith(color: kPcolorTint3),
+          ),
+          StandardTextInputField(
+            hintText: '〇〇〇薬局',
+            onChanged: (value) => shiftNotifier.changeStoreName(value),
+          ),
+          const SizedBox(height: 40),
+          Text(
+            '薬局の住所',
+            style: kCaption.copyWith(color: kPcolorTint3),
+          ),
+          StandardTextInputField(
+            hintText: '〇〇県〇〇市',
+            onChanged: (value) => shiftNotifier.changeAddress(value),
+          ),
+          const SizedBox(height: 40),
+          Text(
+            '薬局の連絡先 : TELがオススメ',
+            style: kCaption.copyWith(color: kPcolorTint3),
+          ),
+          StandardTextInputField(
+              hintText: '0120-22-2345 ( メールアドレスなどでも構いません )',
+              onChanged: (value) => shiftNotifier.changeTEL(value)),
+        ],
       ),
     );
   }

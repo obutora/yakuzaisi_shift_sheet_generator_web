@@ -8,7 +8,7 @@ class ShiftNotifier extends StateNotifier<Shift> {
   ShiftNotifier(ref)
       : super(Shift(
           isWeek: true,
-          date: DateTime.now(),
+          date: DateTime(DateTime.now().year, DateTime.now().month, 1),
           shiftTable:
               List.generate(7, (index) => ShiftBlock(value: ShiftValue.all)),
         ));
@@ -62,7 +62,8 @@ class ShiftNotifier extends StateNotifier<Shift> {
           shiftTable: List.generate(
               lastDay,
               (index) => ShiftBlock(
-                  dateName: '${state.date.month}/$index',
+                  // dateName: '${state.date.month}/$index',
+                  date: DateTime(state.date.year, state.date.month, index + 1),
                   value: ShiftValue.all)));
     }
   }
@@ -73,8 +74,10 @@ class ShiftNotifier extends StateNotifier<Shift> {
     if (state.isWeek) {
       table[index] = ShiftBlock(value: value);
     } else {
-      final String dateName = state.shiftTable![index].dateName!;
-      table[index] = ShiftBlock(value: value, dateName: dateName);
+      // final String dateName = state.shiftTable![index].dateName!;
+      // table[index] = ShiftBlock(value: value, dateName: dateName);
+      final DateTime date = state.shiftTable![index].date!;
+      table[index] = ShiftBlock(value: value, date: date);
     }
     state = state.copyWith(
       shiftTable: table,

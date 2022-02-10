@@ -26,6 +26,9 @@ const TextStyle kMidiumText =
 const TextStyle kSmallText =
     TextStyle(fontSize: 20, fontWeight: FontWeight.w400, color: kBlack);
 
+const TextStyle kPageHeading =
+    TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: kBlack);
+
 const TextStyle kHeading =
     TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: kBlack);
 
