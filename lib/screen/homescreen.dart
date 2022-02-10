@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/const.dart';
+import 'package:yakuzaisi_shift_sheet_generator_web/provider/shift_provider.dart';
 
 import '../view/decoration/card_box_decoration.dart';
 import '../view/widget/month_selector.dart';
@@ -8,13 +10,15 @@ import '../view/widget/preview_week_month_card.dart';
 import '../view/widget/shift_selector.dart';
 import '../view/widget/textinput.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   static const String id = 'HomeScreen';
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final Size size = MediaQuery.of(context).size;
+    final shift = ref.watch(shiftProvider);
+    final shiftNotifier = ref.watch(shiftProvider.notifier);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -35,19 +39,19 @@ class HomeScreen extends StatelessWidget {
                         SelectableViewCard(
                           title: 'Weeklyタイプ',
                           isWeek: true,
-                          isSelected: true,
+                          isSelected: shift.isWeek,
                         ),
                         SelectableViewCard(
                           title: 'Monthlyタイプ',
                           isWeek: false,
-                          isSelected: false,
+                          isSelected: !shift.isWeek,
                         ),
                       ],
                     )
                   : Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: const [
                         SelectableViewCard(
                           title: 'Weeklyタイプ',
                           isWeek: true,
@@ -87,33 +91,46 @@ class HomeScreen extends StatelessWidget {
                       'お名前',
                       style: kCaption.copyWith(color: kPcolorTint3),
                     ),
-                    const StandardTextInputField(
+                    StandardTextInputField(
                       hintText: '薬剤 氏名',
+                      onChanged: (value) => shiftNotifier.changeName(value),
                     ),
                     const SizedBox(height: 40),
                     Text(
                       'ふりがな',
                       style: kCaption.copyWith(color: kPcolorTint3),
                     ),
-                    const StandardTextInputField(
+                    StandardTextInputField(
                       hintText: 'やくざい しめい',
+                      onChanged: (value) => shiftNotifier.changeRuby(value),
                     ),
                     const SizedBox(height: 40),
                     Text(
                       '薬局のお名前',
                       style: kCaption.copyWith(color: kPcolorTint3),
                     ),
-                    const StandardTextInputField(
+                    StandardTextInputField(
                       hintText: '〇〇〇薬局',
+                      onChanged: (value) =>
+                          shiftNotifier.changeStoreName(value),
+                    ),
+                    const SizedBox(height: 40),
+                    Text(
+                      '薬局の住所',
+                      style: kCaption.copyWith(color: kPcolorTint3),
+                    ),
+                    StandardTextInputField(
+                      hintText: '〇〇県〇〇市',
+                      onChanged: (value) => shiftNotifier.changeAddress(value),
                     ),
                     const SizedBox(height: 40),
                     Text(
                       '薬局の連絡先 : TELがオススメ',
                       style: kCaption.copyWith(color: kPcolorTint3),
                     ),
-                    const StandardTextInputField(
-                      hintText: '0120-22-2345 ( メールアドレスなどでも構いません )',
-                    ),
+                    StandardTextInputField(
+                        hintText: '0120-22-2345 ( メールアドレスなどでも構いません )',
+                        onChanged: (value) => shiftNotifier.changeTEL(value)),
                   ],
                 ),
               ),

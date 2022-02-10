@@ -6,15 +6,20 @@ class StandardTextInputField extends StatelessWidget {
   const StandardTextInputField({
     Key? key,
     required this.hintText,
+    required this.onChanged,
   }) : super(key: key);
 
   final String hintText;
+  final Function onChanged;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: TextField(
+        onChanged: (String input) {
+          onChanged(input);
+        },
         style: kSmallText.copyWith(color: kPcolorTint1),
         cursorColor: kPcolorTint3,
         decoration: InputDecoration(

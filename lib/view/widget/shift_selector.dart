@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/view/widget/unit/shift_block.dart';
 
 import '../../const.dart';
+import '../../entity/shift.dart';
 import '../decoration/card_box_decoration.dart';
 
-class ShiftSelector extends StatelessWidget {
+class ShiftSelector extends HookWidget {
   const ShiftSelector({
     Key? key,
     required this.size,
@@ -14,6 +16,9 @@ class ShiftSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final selectedWeekState = useState('日');
+    final changeAllState = useState('OK');
+
     return Container(
       height: 800,
       width: size.width >= 720 ? 600 : size.width * 0.8,
@@ -54,7 +59,7 @@ class ShiftSelector extends StatelessWidget {
                           color: kBgColor,
                         ),
                         child: DropdownButton(
-                            value: '月',
+                            value: selectedWeekState.value,
                             underline: const SizedBox(),
                             borderRadius: BorderRadius.circular(12),
                             focusColor: kBgColor,
@@ -69,7 +74,9 @@ class ShiftSelector extends StatelessWidget {
                                           kSmallText.copyWith(color: kPcolor1),
                                     )))
                                 .toList(),
-                            onChanged: (e) {}),
+                            onChanged: (String? e) {
+                              selectedWeekState.value = e!;
+                            }),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -86,15 +93,15 @@ class ShiftSelector extends StatelessWidget {
                           color: kBgColor,
                         ),
                         child: DropdownButton(
-                            value: '〇',
+                            value: changeAllState.value,
                             underline: const SizedBox(),
                             borderRadius: BorderRadius.circular(12),
                             focusColor: kBgColor,
                             dropdownColor: Colors.white,
                             iconEnabledColor: kPcolor1,
                             items: [
-                              '〇',
-                              '×',
+                              'OK',
+                              '休み',
                               '午前',
                               '午後',
                               '閉局',
@@ -107,7 +114,9 @@ class ShiftSelector extends StatelessWidget {
                                           kSmallText.copyWith(color: kPcolor1),
                                     )))
                                 .toList(),
-                            onChanged: (e) {}),
+                            onChanged: (String? e) {
+                              changeAllState.value = e!;
+                            }),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -149,21 +158,53 @@ class ShiftSelector extends StatelessWidget {
                                 style: kCaption.copyWith(color: kPcolor1),
                               ),
                               const SizedBox(height: 4),
-                              Container(
-                                height: 48,
-                                width: 48,
-                                decoration: BoxDecoration(
-                                  color: kPcolor1,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    '〇',
-                                    style:
-                                        kCaption.copyWith(color: Colors.white),
+                              PopupMenuButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                                iconSize: 48,
+                                icon: Container(
+                                  height: 48,
+                                  width: 48,
+                                  decoration: BoxDecoration(
+                                    color: kPcolor1,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'OK',
+                                      style: kCaption.copyWith(
+                                          color: Colors.white),
+                                    ),
                                   ),
                                 ),
+                                itemBuilder: (context) {
+                                  return ShiftValue.values
+                                      .map((ShiftValue e) => PopupMenuItem(
+                                            value: e,
+                                            child: Text(
+                                              e.typeName,
+                                              style: kCaption.copyWith(
+                                                  color: kPcolor1),
+                                            ),
+                                          ))
+                                      .toList();
+                                },
                               ),
+                              // Container(
+                              //   height: 48,
+                              //   width: 48,
+                              //   decoration: BoxDecoration(
+                              //     color: kPcolor1,
+                              //     borderRadius: BorderRadius.circular(12),
+                              //   ),
+                              //   child: Center(
+                              //     child: Text(
+                              //       'OK',
+                              //       style:
+                              //           kCaption.copyWith(color: Colors.white),
+                              //     ),
+                              //   ),
+                              // ),
                               const SizedBox(height: 12),
                             ],
                     ),

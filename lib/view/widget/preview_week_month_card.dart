@@ -1,11 +1,13 @@
 //NOTE: 1週間分のシフト確認
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:yakuzaisi_shift_sheet_generator_web/provider/shift_provider.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/view/widget/unit/shift_block.dart';
 
 import '../../const.dart';
 import '../decoration/card_box_decoration.dart';
 
-class SelectableViewCard extends StatelessWidget {
+class SelectableViewCard extends ConsumerWidget {
   const SelectableViewCard({
     Key? key,
     required this.title,
@@ -18,7 +20,9 @@ class SelectableViewCard extends StatelessWidget {
   final bool isSelected;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final shiftNotifier = ref.watch(shiftProvider.notifier);
+
     return LimitedBox(
       maxWidth: 400,
       maxHeight: 500,
@@ -41,7 +45,13 @@ class SelectableViewCard extends StatelessWidget {
                   // onChanged: onChanged(),
 
                   //TODO: onChangeでProviderにStateを渡すように変更
-                  onChanged: (e) {},
+                  onChanged: (e) {
+                    if (isWeek) {
+                      shiftNotifier.changeIsWeek(true);
+                    } else {
+                      shiftNotifier.changeIsWeek(false);
+                    }
+                  },
                   shape: const CircleBorder(),
                 ),
                 const SizedBox(width: 8),
