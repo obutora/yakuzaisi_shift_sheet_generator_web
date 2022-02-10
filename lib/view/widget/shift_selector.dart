@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/view/widget/unit/shift_block.dart';
+import 'package:yakuzaisi_shift_sheet_generator_web/view/widget/unit/shift_widget.dart';
 
 import '../../const.dart';
-import '../../entity/shift.dart';
+import '../../provider/shift_provider.dart';
 import '../decoration/card_box_decoration.dart';
 
-class ShiftSelector extends HookWidget {
+class ShiftSelector extends HookConsumerWidget {
   const ShiftSelector({
     Key? key,
     required this.size,
@@ -15,12 +17,21 @@ class ShiftSelector extends HookWidget {
   final Size size;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final shift = ref.watch(shiftProvider);
+    final shiftNotifier = ref.watch(shiftProvider.notifier);
+
     final selectedWeekState = useState('日');
     final changeAllState = useState('OK');
 
+    int shiftLength(DateTime date) {
+      final next = DateTime(date.year, date.month + 1, 1);
+      final last = next.add(const Duration(days: -1));
+      return last.day;
+    }
+
     return Container(
-      height: 800,
+      height: shift.isWeek ? 420 : 800,
       width: size.width >= 720 ? 600 : size.width * 0.8,
       padding: const EdgeInsets.all(20),
       decoration: kCardDecoration(),
@@ -132,7 +143,7 @@ class ShiftSelector extends HookWidget {
             ),
           ),
           GridView.builder(
-              itemCount: 37,
+              itemCount: shift.isWeek ? 14 : shiftLength(shift.date) + 7,
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 7,
@@ -152,61 +163,9 @@ class ShiftSelector extends HookWidget {
                                 style: kHeading.copyWith(color: kPcolor1),
                               )
                             ]
-                          : [
-                              Text(
-                                '1/${index - 6}',
-                                style: kCaption.copyWith(color: kPcolor1),
-                              ),
-                              const SizedBox(height: 4),
-                              PopupMenuButton(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12)),
-                                iconSize: 48,
-                                icon: Container(
-                                  height: 48,
-                                  width: 48,
-                                  decoration: BoxDecoration(
-                                    color: kPcolor1,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'OK',
-                                      style: kCaption.copyWith(
-                                          color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                                itemBuilder: (context) {
-                                  return ShiftValue.values
-                                      .map((ShiftValue e) => PopupMenuItem(
-                                            value: e,
-                                            child: Text(
-                                              e.typeName,
-                                              style: kCaption.copyWith(
-                                                  color: kPcolor1),
-                                            ),
-                                          ))
-                                      .toList();
-                                },
-                              ),
-                              // Container(
-                              //   height: 48,
-                              //   width: 48,
-                              //   decoration: BoxDecoration(
-                              //     color: kPcolor1,
-                              //     borderRadius: BorderRadius.circular(12),
-                              //   ),
-                              //   child: Center(
-                              //     child: Text(
-                              //       'OK',
-                              //       style:
-                              //           kCaption.copyWith(color: Colors.white),
-                              //     ),
-                              //   ),
-                              // ),
-                              const SizedBox(height: 12),
-                            ],
+                          : shift.isWeek
+                              ? weekShiftWidget(shift, shiftNotifier, index)
+                              : monthShiftWidget(shift, shiftNotifier, index),
                     ),
                   )),
         ],

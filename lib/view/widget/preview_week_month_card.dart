@@ -44,13 +44,16 @@ class SelectableViewCard extends ConsumerWidget {
                   activeColor: kPcolor1,
                   // onChanged: onChanged(),
 
-                  //TODO: onChangeでProviderにStateを渡すように変更
+                  //NOTE: onChangeでProviderにStateを渡すように変更
                   onChanged: (e) {
                     if (isWeek) {
                       shiftNotifier.changeIsWeek(true);
                     } else {
                       shiftNotifier.changeIsWeek(false);
                     }
+
+                    //shiftTableの表示を変更
+                    shiftNotifier.createShiftTable();
                   },
                   shape: const CircleBorder(),
                 ),

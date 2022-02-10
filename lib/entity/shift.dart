@@ -1,3 +1,8 @@
+import 'dart:html';
+
+import 'package:flutter/material.dart';
+import 'package:yakuzaisi_shift_sheet_generator_web/const.dart';
+
 enum ShiftValue {
   all,
   am,
@@ -21,6 +26,40 @@ extension ShiftValueName on ShiftValue {
         return '閉局';
       default:
         return '';
+    }
+  }
+
+  Color get bgColor {
+    switch (this) {
+      case ShiftValue.all:
+        return kPcolor1;
+      case ShiftValue.am:
+        return kBgColor;
+      case ShiftValue.pm:
+        return kBgColor;
+      case ShiftValue.holiday:
+        return kSurface;
+      case ShiftValue.close:
+        return kSurface;
+      default:
+        return Colors.white;
+    }
+  }
+
+  Color get textColor {
+    switch (this) {
+      case ShiftValue.all:
+        return Colors.white;
+      case ShiftValue.am:
+        return kPcolor1;
+      case ShiftValue.pm:
+        return kPcolor1;
+      case ShiftValue.holiday:
+        return kPcolor1;
+      case ShiftValue.close:
+        return kPcolor1;
+      default:
+        return Colors.white;
     }
   }
 }
