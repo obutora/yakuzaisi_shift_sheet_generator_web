@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yakuzaisi_shift_sheet_generator_web/view/widget/unit/shift_block.dart';
 
 import '../../const.dart';
 import '../decoration/card_box_decoration.dart';
@@ -138,8 +139,8 @@ class ShiftSelector extends StatelessWidget {
                       children: index <= 6
                           ? [
                               Text(
-                                index.toString(),
-                                style: kCaption.copyWith(color: kPcolor1),
+                                weekDay(index),
+                                style: kHeading.copyWith(color: kPcolor1),
                               )
                             ]
                           : [

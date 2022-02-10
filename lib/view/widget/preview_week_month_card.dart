@@ -1,5 +1,6 @@
 //NOTE: 1週間分のシフト確認
 import 'package:flutter/material.dart';
+import 'package:yakuzaisi_shift_sheet_generator_web/view/widget/unit/shift_block.dart';
 
 import '../../const.dart';
 import '../decoration/card_box_decoration.dart';
@@ -71,72 +72,6 @@ class PreviewShiftBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //ブロックに差を付けたいので関数にて定義している
-    Widget contentBlock(String input) {
-      if (input == '木') {
-        return Container(
-          height: 38,
-          width: 38,
-          decoration: BoxDecoration(
-            color: kPcolor2,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Center(
-            child: Text(
-              '午前',
-              style: kCaption.copyWith(color: kPcolor1),
-            ),
-          ),
-        );
-      } else if (input == '日') {
-        return Container(
-          height: 38,
-          width: 38,
-          decoration: BoxDecoration(
-            color: kSurface,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Center(
-            child: Text(
-              '閉局',
-              style: kCaption.copyWith(color: kPcolor1),
-            ),
-          ),
-        );
-      } else {
-        return Container(
-          height: 38,
-          width: 38,
-          decoration: BoxDecoration(
-            color: kPcolor1,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Center(
-            child: Text(
-              '〇',
-              style: kCaption.copyWith(color: Colors.white),
-            ),
-          ),
-        );
-      }
-    }
-
-    String weekDay(int index) {
-      if (index == 0) {
-        return '月';
-      } else if (index == 1) {
-        return '火';
-      } else if (index == 2) {
-        return '水';
-      } else if (index == 3) {
-        return '木';
-      } else if (index == 4) {
-        return '金';
-      } else if (index == 5) {
-        return '土';
-      } else {
-        return '日';
-      }
-    }
 
     return isWeek
         ? FittedBox(
@@ -190,14 +125,10 @@ class PreviewShiftBlock extends StatelessWidget {
                             height: 40,
                             width: 40,
                             decoration: BoxDecoration(
-                              color: kPcolor1,
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Center(
-                              child: Text(
-                                '〇',
-                                style: kCaption.copyWith(color: Colors.white),
-                              ),
+                              child: contentBlock(weekDay(index % 7)),
                             ),
                           ),
                           const SizedBox(height: 12),

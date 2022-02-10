@@ -87,25 +87,33 @@ class HomeScreen extends StatelessWidget {
                       'お名前',
                       style: kCaption.copyWith(color: kPcolorTint3),
                     ),
-                    const StandardTextInputField(),
+                    const StandardTextInputField(
+                      hintText: '薬剤 氏名',
+                    ),
                     const SizedBox(height: 40),
                     Text(
                       'ふりがな',
                       style: kCaption.copyWith(color: kPcolorTint3),
                     ),
-                    const StandardTextInputField(),
+                    const StandardTextInputField(
+                      hintText: 'やくざい しめい',
+                    ),
                     const SizedBox(height: 40),
                     Text(
                       '薬局のお名前',
                       style: kCaption.copyWith(color: kPcolorTint3),
                     ),
-                    const StandardTextInputField(),
+                    const StandardTextInputField(
+                      hintText: '〇〇〇薬局',
+                    ),
                     const SizedBox(height: 40),
                     Text(
                       '薬局の連絡先 : TELがオススメ',
                       style: kCaption.copyWith(color: kPcolorTint3),
                     ),
-                    const StandardTextInputField(),
+                    const StandardTextInputField(
+                      hintText: '0120-22-2345 ( メールアドレスなどでも構いません )',
+                    ),
                   ],
                 ),
               ),

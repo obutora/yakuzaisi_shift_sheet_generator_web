@@ -62,7 +62,7 @@ class MonthSelector extends StatelessWidget {
                   return DropdownMenuItem(
                     value: month,
                     child: Text(
-                      '$month',
+                      '$month月',
                       style: kSmallText.copyWith(color: kPcolor1),
                     ),
                   );

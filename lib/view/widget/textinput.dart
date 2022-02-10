@@ -5,25 +5,29 @@ import 'package:yakuzaisi_shift_sheet_generator_web/const.dart';
 class StandardTextInputField extends StatelessWidget {
   const StandardTextInputField({
     Key? key,
+    required this.hintText,
   }) : super(key: key);
+
+  final String hintText;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: TextField(
-        style: kSmallText.copyWith(color: kPcolorTint3),
+        style: kSmallText.copyWith(color: kPcolorTint1),
         cursorColor: kPcolorTint3,
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
+          hintText: hintText,
           focusColor: kPcolorTint2,
           fillColor: kPcolor1,
-          enabledBorder: UnderlineInputBorder(
+          enabledBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: kPcolorTint4, width: 0.5),
           ),
-          focusedBorder: UnderlineInputBorder(
+          focusedBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: kPcolor1, width: 0.5),
           ),
-          prefixIcon: Icon(
+          prefixIcon: const Icon(
             CupertinoIcons.pen,
             color: kPcolorTint3,
           ),
