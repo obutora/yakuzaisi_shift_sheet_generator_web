@@ -17,6 +17,9 @@ const Color kSecoundary = Color(0xFFCCCCCC);
 const Color kBlack = Color(0xFF111213);
 const Color kSurface = Color(0xFFF0F0F0);
 
+const TextStyle kXLargeText =
+    TextStyle(fontSize: 42, fontWeight: FontWeight.w500, color: kBlack);
+
 const TextStyle kLargeText =
     TextStyle(fontSize: 28, fontWeight: FontWeight.w500, color: kBlack);
 

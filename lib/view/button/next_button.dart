@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:yakuzaisi_shift_sheet_generator_web/provider/shift_provider.dart';
+import 'package:yakuzaisi_shift_sheet_generator_web/provider/shift_text_controllers.dart';
 
 import '../../const.dart';
 import '../../provider/progress_provider.dart';
@@ -9,16 +11,22 @@ class NextButton extends StatelessWidget {
     Key? key,
     required this.title,
     required this.onPressed,
+    this.color,
+    this.textColor,
   }) : super(key: key);
 
   final VoidCallback onPressed;
   final String title;
+  final Color? color;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: kPcolorTint1,
+          primary: color ?? kPcolorTint1,
+          elevation: 3,
+          shadowColor: kPcolorTint8,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -28,7 +36,7 @@ class NextButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 8),
           child: Text(
             title,
-            style: kPageHeading.copyWith(color: Colors.white),
+            style: kPageHeading.copyWith(color: textColor ?? Colors.white),
           ),
         ));
   }
@@ -47,6 +55,7 @@ class BackAndNextButtons extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final Size size = MediaQuery.of(context).size;
+    final shift = ref.watch(shiftProvider);
     final notifier = ref.watch(progressProvider.notifier);
 
     return Padding(
@@ -57,13 +66,18 @@ class BackAndNextButtons extends ConsumerWidget {
               children: [
                 NextButton(
                   title: '前にもどる',
+                  color: kBgColor,
+                  textColor: kPcolor1,
                   onPressed: () {
+                    ShiftTextEditingControllers.update(shift);
                     notifier.change(backIndex);
                   },
                 ),
                 NextButton(
                   title: 'つぎへ進む',
                   onPressed: () {
+                    ShiftTextEditingControllers.update(shift);
+
                     notifier.change(nextIndex);
                   },
                 ),
@@ -73,7 +87,10 @@ class BackAndNextButtons extends ConsumerWidget {
               children: [
                 NextButton(
                   title: '前にもどる',
+                  color: kBgColor,
+                  textColor: kPcolor1,
                   onPressed: () {
+                    ShiftTextEditingControllers.update(shift);
                     notifier.change(backIndex);
                   },
                 ),
@@ -81,6 +98,7 @@ class BackAndNextButtons extends ConsumerWidget {
                 NextButton(
                   title: 'つぎへ進む',
                   onPressed: () {
+                    ShiftTextEditingControllers.update(shift);
                     notifier.change(nextIndex);
                   },
                 ),

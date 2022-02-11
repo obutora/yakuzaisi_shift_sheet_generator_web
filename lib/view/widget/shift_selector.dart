@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/entity/shift.dart';
-import 'package:yakuzaisi_shift_sheet_generator_web/view/widget/unit/shift_block.dart';
-import 'package:yakuzaisi_shift_sheet_generator_web/view/widget/unit/shift_widget.dart';
+import 'package:yakuzaisi_shift_sheet_generator_web/services/shift_service.dart';
 
 import '../../const.dart';
 import '../../provider/shift_provider.dart';
@@ -24,39 +23,6 @@ class ShiftSelector extends HookConsumerWidget {
 
     late ValueNotifier<String> selectedWeekState = useState('日');
     late ValueNotifier<ShiftValue> changeAllState = useState(ShiftValue.all);
-
-    // useEffect(() {
-    //   selectedWeekState = ValueNotifier('日');
-    //   changeAllState = ValueNotifier(ShiftValue.all);
-    //   return null;
-    // }, const []);
-
-    int shiftLength(DateTime date) {
-      final next = DateTime(date.year, date.month + 1, 1);
-      final last = next.add(const Duration(days: -1));
-      return last.day;
-    }
-
-    int calcWeekDay(String weekName) {
-      switch (weekName) {
-        case '日':
-          return 7;
-        case '月':
-          return 1;
-        case '火':
-          return 2;
-        case '水':
-          return 3;
-        case '木':
-          return 4;
-        case '金':
-          return 5;
-        case '土':
-          return 6;
-        default:
-          return 0;
-      }
-    }
 
     return Container(
       height: shift.isWeek ? 240 : 800,
@@ -172,8 +138,10 @@ class ShiftSelector extends HookConsumerWidget {
                                               (e) => DropdownMenuItem(
                                                 value: e,
                                                 onTap: () {
-                                                  final weekDay = calcWeekDay(
-                                                      selectedWeekState.value);
+                                                  final weekDay =
+                                                      ShiftService.calcWeekDay(
+                                                          selectedWeekState
+                                                              .value);
 
                                                   shift.shiftTable!
                                                       .asMap()
@@ -217,7 +185,9 @@ class ShiftSelector extends HookConsumerWidget {
           GridView.builder(
               itemCount: shift.isWeek
                   ? 14
-                  : shiftLength(shift.date) + 7 + (shift.date.weekday - 1),
+                  : ShiftService.shiftLength(shift.date) +
+                      7 +
+                      (shift.date.weekday - 1),
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 7,
@@ -231,35 +201,11 @@ class ShiftSelector extends HookConsumerWidget {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
-                        children: widgetSelector(
-                            index, shift.isWeek, shift, shiftNotifier)));
+                        children: ShiftService.widgetSelector(
+                            index, shift.isWeek, shift, shiftNotifier, false)));
               }),
         ],
       ),
     );
-  }
-}
-
-List<Widget> widgetSelector(
-    int index, bool isWeek, Shift shift, ShiftNotifier shiftNotifier) {
-  if (index <= 6) {
-    return [
-      Text(
-        weekDay(index),
-        style: kHeading.copyWith(color: kPcolor1),
-      )
-    ];
-  } else if (isWeek) {
-    return weekShiftWidget(shift, shiftNotifier, index);
-  } else if (index <= 6 + (shift.date.weekday - 1)) {
-    return [
-      const SizedBox(
-        width: 100,
-        height: 100,
-      )
-    ];
-  } else {
-    return monthShiftWidget(
-        shift, shiftNotifier, index, 7 + (shift.date.weekday - 1));
   }
 }

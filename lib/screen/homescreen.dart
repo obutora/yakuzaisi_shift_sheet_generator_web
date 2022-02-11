@@ -1,6 +1,9 @@
+import 'dart:html' as html;
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/rendering.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/const.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/provider/progress_provider.dart';
@@ -9,6 +12,7 @@ import 'package:yakuzaisi_shift_sheet_generator_web/view/card/content_card.dart'
 import '../view/button/next_button.dart';
 import '../view/text/title_with_marker.dart';
 import '../view/widget/month_selector.dart';
+import '../view/widget/pdf_contents.dart';
 import '../view/widget/shift_selector.dart';
 import '../view/widget/shift_type_selector.dart';
 import '../view/widget/textinput.dart';
@@ -40,19 +44,27 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
-class ProgressWidgetSelector extends ConsumerWidget {
+class ProgressWidgetSelector extends ConsumerStatefulWidget {
   const ProgressWidgetSelector({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ProgressWidgetSelectorState createState() => ProgressWidgetSelectorState();
+}
+
+class ProgressWidgetSelectorState
+    extends ConsumerState<ProgressWidgetSelector> {
+  @override
+  Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final shift = ref.watch(shiftProvider);
     final shiftNotifier = ref.watch(shiftProvider.notifier);
 
     final progress = ref.watch(progressProvider);
     final progressNotifier = ref.watch(progressProvider.notifier);
+
+    final GlobalKey contentKey = GlobalKey();
 
     //NOTE: シフトタイプ選択
     if (progress == 0) {
@@ -135,37 +147,77 @@ class ProgressWidgetSelector extends ConsumerWidget {
         key: const ValueKey(3),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            TitleWithMarker(
+          children: [
+            const TitleWithMarker(
                 title: 'シフト表を作成しました',
-                description: 'シフト表を作成しました。\nシフト表を確認して、編集することができます。',
-                iconData: CupertinoIcons.briefcase),
-            SizedBox(height: 28),
-            SizedBox(height: 40),
-            BackAndNextButtons(backIndex: 2, nextIndex: 4),
+                description: 'シフト表を作成しました。\nシフト表を確認して、ダウンロード / 印刷することができます。',
+                iconData: CupertinoIcons.gift),
+            const SizedBox(height: 40),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: kPcolorTint8,
+                  width: 1,
+                ),
+              ),
+              child: RepaintBoundary(
+                key: contentKey,
+                child: const PdfContents(),
+              ),
+            ),
+            const SizedBox(
+              height: 40,
+            ),
+            NextButton(
+                title: '画像としてダウンロード',
+                onPressed: () async {
+                  RenderRepaintBoundary? renderObject =
+                      contentKey.currentContext!.findRenderObject()
+                          as RenderRepaintBoundary?;
+
+                  final image = await renderObject!.toImage(pixelRatio: 6.0);
+                  final byteData =
+                      await image.toByteData(format: ImageByteFormat.png);
+
+                  final pngBytes = byteData!.buffer.asUint8List();
+                  final blob =
+                      html.Blob([pngBytes], 'application/octet-stream');
+
+                  html.AnchorElement a = html.AnchorElement(
+                      href: html.Url.createObjectUrlFromBlob(blob));
+                  a.setAttribute('download', 'image.png');
+                  a.click();
+
+                  // print(base64);
+                }),
+            const SizedBox(
+              height: 28,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: FittedBox(
+                child: Row(
+                  children: [
+                    NextButton(
+                      title: 'もどる',
+                      onPressed: () {
+                        progressNotifier.change(2);
+                      },
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    NextButton(
+                      title: 'トップへ',
+                      onPressed: () {
+                        progressNotifier.change(0);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
-        ),
-      );
-    } else if (progress == 4) {
-      return ContentCard(
-        child: AspectRatio(
-          aspectRatio: 1 / 1.4142,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'あなたの',
-                style: kHeading.copyWith(color: kPcolor1),
-              ),
-              Text(
-                'かかりつけ薬剤師',
-                style: kMidiumText.copyWith(color: kPcolor1),
-              ),
-              SvgPicture.asset(
-                'assets/hero_women.svg',
-              )
-            ],
-          ),
         ),
       );
     } else {

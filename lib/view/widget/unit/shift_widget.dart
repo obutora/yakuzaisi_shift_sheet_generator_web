@@ -4,140 +4,185 @@ import 'package:yakuzaisi_shift_sheet_generator_web/provider/shift_provider.dart
 import '../../../const.dart';
 import '../../../entity/shift.dart';
 
-List<Widget> monthShiftWidget(
-    Shift shift, ShiftNotifier notifier, int index, int minus) {
+List<Widget> monthShiftWidget(Shift shift, ShiftNotifier notifier, int index,
+    int minus, bool? isPreview) {
   //indexは月火水木金土日の7個が最初に含まれるため0を含む6を引く
-
   final ShiftValue shiftValue = shift.shiftTable![index - minus].value;
 
-  return [
-    Text(
-      '${shift.date.month}/${index - (minus - 1)}',
-      style: kCaption.copyWith(color: kPcolor1),
-    ),
-    const SizedBox(height: 4),
-    PopupMenuButton(
-      onSelected: (ShiftValue value) {
-        // print(value);
-        // print(index - 7);
-
-        notifier.changeShiftBlock(index - minus, value);
-      },
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      tooltip: 'タップで変更できます',
-      iconSize: 48,
-      icon: Container(
-        height: 48,
-        width: 48,
-        decoration: BoxDecoration(
-          color: shiftValue.bgColor,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Stack(
-          children: [
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Text(
-                  shiftValue.typeName,
-                  style: kSmallText.copyWith(color: shiftValue.textColor),
-                ),
+  return isPreview == true
+      ? [
+          Column(
+            children: [
+              Text(
+                '${shift.date.month}/${index - (minus - 1)}',
+                style: kCaption.copyWith(color: kPcolor1),
               ),
-            ),
-            SizedBox(
-              width: 48,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 32),
-                child: Text(
-                  '▼',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 8,
-                    color: shiftValue.textColor,
-                  ),
+              const SizedBox(height: 4),
+              Container(
+                height: 48,
+                width: 48,
+                decoration: BoxDecoration(
+                  color: shiftValue.bgColor,
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      itemBuilder: (context) {
-        return ShiftValue.values
-            .map((ShiftValue e) => PopupMenuItem(
-                  value: e,
+                child: Center(
                   child: Text(
-                    e.typeName,
-                    style: kHeading.copyWith(color: kPcolor1),
+                    shiftValue.typeName,
+                    style: kSmallText.copyWith(color: shiftValue.textColor),
                   ),
-                ))
-            .toList();
-      },
-    ),
-    const SizedBox(height: 12),
-  ];
+                ),
+              ),
+            ],
+          ),
+        ]
+      : [
+          Text(
+            '${shift.date.month}/${index - (minus - 1)}',
+            style: kCaption.copyWith(color: kPcolor1),
+          ),
+          const SizedBox(height: 4),
+          PopupMenuButton(
+            onSelected: (ShiftValue value) {
+              // print(value);
+              // print(index - 7);
+
+              notifier.changeShiftBlock(index - minus, value);
+            },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            tooltip: 'タップで変更できます',
+            iconSize: 48,
+            icon: Container(
+              height: 48,
+              width: 48,
+              decoration: BoxDecoration(
+                color: shiftValue.bgColor,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Stack(
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Text(
+                        shiftValue.typeName,
+                        style: kSmallText.copyWith(color: shiftValue.textColor),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 48,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 32),
+                      child: Text(
+                        '▼',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 8,
+                          color: shiftValue.textColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            itemBuilder: (context) {
+              return ShiftValue.values
+                  .map((ShiftValue e) => PopupMenuItem(
+                        value: e,
+                        child: Text(
+                          e.typeName,
+                          style: kHeading.copyWith(color: kPcolor1),
+                        ),
+                      ))
+                  .toList();
+            },
+          ),
+          const SizedBox(height: 12),
+        ];
 }
 
-List<Widget> weekShiftWidget(Shift shift, ShiftNotifier notifier, int index) {
+List<Widget> weekShiftWidget(
+    Shift shift, ShiftNotifier notifier, int index, bool? isPreview) {
   final ShiftValue shiftValue = shift.shiftTable![index - 7].value;
-  return [
-    PopupMenuButton(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      onSelected: (ShiftValue value) {
-        // print(value);
-        // print(index - 7);
+  return isPreview == true
+      ? [
+          Container(
+            height: 48,
+            width: 48,
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            decoration: BoxDecoration(
+              color: shiftValue.bgColor,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Center(
+              child: Text(
+                shiftValue.typeName,
+                style: kSmallText.copyWith(color: shiftValue.textColor),
+              ),
+            ),
+          ),
+        ]
+      : [
+          PopupMenuButton(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            onSelected: (ShiftValue value) {
+              // print(value);
+              // print(index - 7);
 
-        notifier.changeShiftBlock(index - 7, value);
-      },
-      tooltip: 'タップで変更できます',
-      iconSize: 48,
-      icon: Container(
-        height: 48,
-        width: 48,
-        decoration: BoxDecoration(
-          color: shiftValue.bgColor,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Stack(
-          children: [
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Text(
-                  shiftValue.typeName,
-                  style: kSmallText.copyWith(color: shiftValue.textColor),
-                ),
-              ),
-            ),
-            SizedBox(
+              notifier.changeShiftBlock(index - 7, value);
+            },
+            tooltip: 'タップで変更できます',
+            iconSize: 48,
+            icon: Container(
+              height: 48,
               width: 48,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 32),
-                child: Text(
-                  '▼',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 8, color: shiftValue.textColor),
-                ),
+              decoration: BoxDecoration(
+                color: shiftValue.bgColor,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Stack(
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Text(
+                        shiftValue.typeName,
+                        style: kSmallText.copyWith(color: shiftValue.textColor),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 48,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 32),
+                      child: Text(
+                        '▼',
+                        textAlign: TextAlign.center,
+                        style:
+                            TextStyle(fontSize: 8, color: shiftValue.textColor),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
-      itemBuilder: (context) {
-        return ShiftValue.values
-            .map((ShiftValue e) => PopupMenuItem(
-                  value: e,
-                  child: Text(
-                    e.typeName,
-                    style: kHeading.copyWith(color: kPcolor1),
-                  ),
-                ))
-            .toList();
-      },
-    ),
-    const SizedBox(height: 12),
-  ];
+            itemBuilder: (context) {
+              return ShiftValue.values
+                  .map((ShiftValue e) => PopupMenuItem(
+                        value: e,
+                        child: Text(
+                          e.typeName,
+                          style: kHeading.copyWith(color: kPcolor1),
+                        ),
+                      ))
+                  .toList();
+            },
+          ),
+          const SizedBox(height: 12),
+        ];
 }
