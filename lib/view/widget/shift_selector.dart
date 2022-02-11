@@ -226,7 +226,6 @@ class ShiftSelector extends HookConsumerWidget {
                   mainAxisExtent: 80),
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
-                print(shift.date.weekday - 1);
                 return FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Column(

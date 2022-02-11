@@ -1,15 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:simple_animations/simple_animations.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/const.dart';
-import 'package:yakuzaisi_shift_sheet_generator_web/entity/shift.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/provider/progress_provider.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/provider/shift_provider.dart';
-import 'package:yakuzaisi_shift_sheet_generator_web/view/animation/easing.dart';
+import 'package:yakuzaisi_shift_sheet_generator_web/view/card/content_card.dart';
 import '../view/button/next_button.dart';
+import '../view/text/title_with_marker.dart';
 import '../view/widget/month_selector.dart';
-import '../view/widget/preview_week_month_card.dart';
 import '../view/widget/shift_selector.dart';
+import '../view/widget/shift_type_selector.dart';
 import '../view/widget/textinput.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -19,6 +20,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      backgroundColor: kBgColor,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
@@ -28,7 +30,8 @@ class HomeScreen extends ConsumerWidget {
               SizedBox(
                 height: 120,
               ),
-              ProgressWidgetSelector(),
+              Center(child: ProgressWidgetSelector()),
+              SizedBox(height: 200),
             ],
           ),
         ),
@@ -53,17 +56,12 @@ class ProgressWidgetSelector extends ConsumerWidget {
 
     //NOTE: シフトタイプ選択
     if (progress == 0) {
-      return EasingAnimation(
-        easingDirection: Easing.leftIn,
-        durationInMilliseconds: 1200,
-        curve: Curves.easeOutCirc,
-        delayInMilliseconds: 600,
-        moveAmount: 600,
-        control: CustomAnimationControl.play,
+      return ContentCard(
+        key: const ValueKey(0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ShiftTypeSelector(size: size, shift: shift),
+            ShiftTypeSelector(shift: shift),
             shift.isWeek
                 ? const SizedBox()
                 : Row(
@@ -86,27 +84,23 @@ class ProgressWidgetSelector extends ConsumerWidget {
                   },
                 ),
               ],
-            )
+            ),
           ],
         ),
       );
 
       //NOTE: 基本情報入力
     } else if (progress == 1) {
-      return EasingAnimation(
-        easingDirection: Easing.leftIn,
-        durationInMilliseconds: 1200,
-        curve: Curves.easeOutCirc,
-        delayInMilliseconds: 600,
-        moveAmount: 600,
-        control: CustomAnimationControl.playFromStart,
+      return ContentCard(
+        key: const ValueKey(1),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
-              'シフト表に入れる項目をそれぞれ入力してください🙇',
-              style: kMidiumText,
-            ),
+            const TitleWithMarker(
+                title: 'シフト表の基本情報を入力してください',
+                description:
+                    'シフト表にかかりつけ薬剤師のお名前や、薬局の連絡先を入れることができます。\n緊急時の連絡先情報を患者さんに提供することができます。',
+                iconData: CupertinoIcons.pencil_outline),
             const SizedBox(height: 28),
             TextForm(shiftNotifier: shiftNotifier),
             const SizedBox(height: 40),
@@ -118,90 +112,64 @@ class ProgressWidgetSelector extends ConsumerWidget {
         ),
       );
     } else if (progress == 2) {
-      return EasingAnimation(
-        easingDirection: Easing.leftIn,
-        durationInMilliseconds: 1200,
-        curve: Curves.easeOutCirc,
-        delayInMilliseconds: 600,
-        moveAmount: 600,
-        control: CustomAnimationControl.playFromStart,
-        child: Center(
+      return ContentCard(
+        key: const ValueKey(2),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TitleWithMarker(
+                title: '最後にシフトの入力をお願いします',
+                description: shift.isWeek
+                    ? '緑のボタンを押して、シフト表を作成しましょう！'
+                    : '緑のボタンを押して、シフトを作成しましょう！\n一括入力を使うことでカンタンにシフトを入力できます。',
+                iconData: CupertinoIcons.briefcase),
+            const SizedBox(height: 28),
+            ShiftSelector(size: size),
+            const SizedBox(height: 40),
+            const BackAndNextButtons(backIndex: 1, nextIndex: 3),
+          ],
+        ),
+      );
+    } else if (progress == 3) {
+      return ContentCard(
+        key: const ValueKey(3),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            TitleWithMarker(
+                title: 'シフト表を作成しました',
+                description: 'シフト表を作成しました。\nシフト表を確認して、編集することができます。',
+                iconData: CupertinoIcons.briefcase),
+            SizedBox(height: 28),
+            SizedBox(height: 40),
+            BackAndNextButtons(backIndex: 2, nextIndex: 4),
+          ],
+        ),
+      );
+    } else if (progress == 4) {
+      return ContentCard(
+        child: AspectRatio(
+          aspectRatio: 1 / 1.4142,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                '最後にシフトの入力をお願いします👨‍💻',
-                style: kMidiumText,
+              Text(
+                'あなたの',
+                style: kHeading.copyWith(color: kPcolor1),
               ),
-              const SizedBox(height: 28),
-              ShiftSelector(size: size),
-              const SizedBox(height: 40),
-              const BackAndNextButtons(backIndex: 1, nextIndex: 3),
-              const SizedBox(height: 200),
+              Text(
+                'かかりつけ薬剤師',
+                style: kMidiumText.copyWith(color: kPcolor1),
+              ),
+              SvgPicture.asset(
+                'assets/hero_women.svg',
+              )
             ],
           ),
         ),
       );
     } else {
-      return Container();
+      return const SizedBox();
     }
-  }
-}
-
-class ShiftTypeSelector extends StatelessWidget {
-  const ShiftTypeSelector({
-    Key? key,
-    required this.size,
-    required this.shift,
-  }) : super(key: key);
-
-  final Size size;
-  final Shift shift;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const Text(
-          'シフトタイプを選んでください🔎',
-          style: kMidiumText,
-        ),
-        const SizedBox(height: 28),
-        //NOTE : responsive
-        size.width >= 900
-            ? Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SelectableViewCard(
-                    title: 'Weeklyタイプ',
-                    isWeek: true,
-                    isSelected: shift.isWeek,
-                  ),
-                  SelectableViewCard(
-                    title: 'Monthlyタイプ',
-                    isWeek: false,
-                    isSelected: !shift.isWeek,
-                  ),
-                ],
-              )
-            : Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  SelectableViewCard(
-                    title: 'Weeklyタイプ',
-                    isWeek: true,
-                    isSelected: true,
-                  ),
-                  SelectableViewCard(
-                    title: 'Monthlyタイプ',
-                    isWeek: false,
-                    isSelected: false,
-                  ),
-                ],
-              ),
-      ],
-    );
   }
 }

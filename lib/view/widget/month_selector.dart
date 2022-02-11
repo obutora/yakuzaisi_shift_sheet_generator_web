@@ -31,7 +31,7 @@ class MonthSelector extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(
-                CupertinoIcons.calendar,
+                CupertinoIcons.time,
                 color: kPcolor1,
               ),
               const SizedBox(width: 4),

@@ -38,32 +38,57 @@ class SelectableViewCard extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Checkbox(
-                  value: isSelected,
-                  focusColor: kPcolor1,
-                  activeColor: kPcolor1,
-                  // onChanged: onChanged(),
+                Transform.scale(
+                  scale: 1.3,
+                  child: Checkbox(
+                    value: isSelected,
+                    focusColor: kPcolor1,
+                    activeColor: kPcolor1,
+                    hoverColor: kPcolorTint6.withOpacity(0.3),
 
-                  //NOTE: onChangeでProviderにStateを渡すように変更
-                  onChanged: (e) {
-                    if (isWeek) {
-                      shiftNotifier.changeIsWeek(true);
-                    } else {
-                      shiftNotifier.changeIsWeek(false);
-                    }
+                    // onChanged: onChanged(),
 
-                    //shiftTableの表示を変更
-                    shiftNotifier.createShiftTable();
-                  },
-                  shape: const CircleBorder(),
+                    //NOTE: onChangeでProviderにStateを渡すように変更
+                    onChanged: (e) {
+                      if (isWeek) {
+                        shiftNotifier.changeIsWeek(true);
+                      } else {
+                        shiftNotifier.changeIsWeek(false);
+                      }
+
+                      //shiftTableの表示を変更
+                      shiftNotifier.createShiftTable();
+                    },
+                    shape: const CircleBorder(),
+                  ),
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  title,
-                  style: kSmallText.copyWith(color: kBlack),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        overflow: TextOverflow.visible,
+                        style: kSmallText.copyWith(color: kBlack),
+                      ),
+                      Text(
+                        isWeek ? 'おおまかなシフトが必要なときに！' : 'より確実に会えるシフト表が必要なときに！',
+                        style: kCaption.copyWith(color: kBlack),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
+            // const SizedBox(height: 8),
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 8),
+            //   child: Text(
+            //     isWeek ? 'おおまかなシフトが必要なときに！' : 'より確実に会えるシフト表が必要なときに！',
+            //     style: kCaption.copyWith(color: kBlack),
+            //   ),
+            // ),
             Container(
               padding: const EdgeInsets.all(20),
               child: PreviewShiftBlock(
