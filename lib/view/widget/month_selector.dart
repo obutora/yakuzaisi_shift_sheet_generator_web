@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/provider/shift_provider.dart';
 
 import '../../const.dart';
-import '../decoration/card_box_decoration.dart';
 
 class MonthSelector extends ConsumerWidget {
   const MonthSelector({
@@ -21,7 +20,12 @@ class MonthSelector extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
       margin: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: kCardDecoration(),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: Colors.white,
+          boxShadow: const [
+            BoxShadow(color: kPcolorTint6, spreadRadius: 1, blurRadius: 2)
+          ]),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -32,153 +32,164 @@ class ShiftSelector extends HookConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const SizedBox(height: 20),
           !shift.isWeek
-              ? Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    // border: Border.all(color: kPcolorTint6, width: 1),
-                    color: Colors.white,
-                    boxShadow: const [
-                      BoxShadow(
-                        color: kPcolorTint8,
-                        blurRadius: 2,
-                        spreadRadius: 3,
+              ? Center(
+                  child: FittedBox(
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        // border: Border.all(color: kPcolorTint6, width: 1),
+                        color: Colors.white,
+                        boxShadow: const [
+                          BoxShadow(
+                            color: kPcolorTint8,
+                            blurRadius: 2,
+                            spreadRadius: 3,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '一括設定',
-                        style: kSmallText.copyWith(color: kPcolor1),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        '曜日ごとに一気に設定することができます。\n必ず閉局している曜日がある場合などにお使いください。',
-                        style: kCaption.copyWith(color: kPcolor1),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 4),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: kBgColor,
-                              ),
-                              child: ValueListenableBuilder<String>(
-                                  valueListenable: selectedWeekState,
-                                  builder: (context, snapshot, child) {
-                                    return DropdownButton(
-                                        value: selectedWeekState.value,
-                                        underline: const SizedBox(),
-                                        borderRadius: BorderRadius.circular(12),
-                                        focusColor: kBgColor,
-                                        dropdownColor: Colors.white,
-                                        iconEnabledColor: kPcolor1,
-                                        items: [
-                                          '月',
-                                          '火',
-                                          '水',
-                                          '木',
-                                          '金',
-                                          '土',
-                                          '日'
-                                        ]
-                                            .map((e) => DropdownMenuItem(
-                                                value: e,
-                                                // onTap: () {
-                                                //   print('youbi---------------');
-                                                //   print(e);
-                                                //   print(changeAllState.value);
-                                                // },
-                                                child: Text(
-                                                  e + '曜日',
-                                                  style: kSmallText.copyWith(
-                                                      color: kPcolor1),
-                                                )))
-                                            .toList(),
-                                        onChanged: (String? e) {
-                                          selectedWeekState.value = e!;
-                                        });
-                                  }),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                              child: Text(
-                                'をすべて',
-                                style: kCaption.copyWith(color: kPcolor1),
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 4),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: kBgColor,
-                              ),
-                              child: ValueListenableBuilder<ShiftValue>(
-                                  valueListenable: changeAllState,
-                                  builder: (context, snapshot, child) {
-                                    return DropdownButton(
-                                        value: changeAllState.value,
-                                        underline: const SizedBox(),
-                                        borderRadius: BorderRadius.circular(12),
-                                        focusColor: kBgColor,
-                                        dropdownColor: Colors.white,
-                                        iconEnabledColor: kPcolor1,
-                                        items: ShiftValue.values
-                                            .map(
-                                              (e) => DropdownMenuItem(
-                                                value: e,
-                                                onTap: () {
-                                                  final weekDay =
-                                                      ShiftService.calcWeekDay(
-                                                          selectedWeekState
-                                                              .value);
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '一括設定',
+                            style: kSmallText.copyWith(color: kPcolor1),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            '曜日ごとに一気に設定することができます。\n必ず閉局している曜日がある場合などにお使いください。',
+                            style: kCaption.copyWith(color: kPcolor1),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: kBgColor,
+                                  ),
+                                  child: ValueListenableBuilder<String>(
+                                      valueListenable: selectedWeekState,
+                                      builder: (context, snapshot, child) {
+                                        return DropdownButton(
+                                            value: selectedWeekState.value,
+                                            underline: const SizedBox(),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            focusColor: kBgColor,
+                                            dropdownColor: Colors.white,
+                                            iconEnabledColor: kPcolor1,
+                                            items: [
+                                              '月',
+                                              '火',
+                                              '水',
+                                              '木',
+                                              '金',
+                                              '土',
+                                              '日'
+                                            ]
+                                                .map((e) => DropdownMenuItem(
+                                                    value: e,
+                                                    // onTap: () {
+                                                    //   print('youbi---------------');
+                                                    //   print(e);
+                                                    //   print(changeAllState.value);
+                                                    // },
+                                                    child: Text(
+                                                      e + '曜日',
+                                                      style:
+                                                          kSmallText.copyWith(
+                                                              color: kPcolor1),
+                                                    )))
+                                                .toList(),
+                                            onChanged: (String? e) {
+                                              selectedWeekState.value = e!;
+                                            });
+                                      }),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: Text(
+                                    'をすべて',
+                                    style: kCaption.copyWith(color: kPcolor1),
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: kBgColor,
+                                  ),
+                                  child: ValueListenableBuilder<ShiftValue>(
+                                      valueListenable: changeAllState,
+                                      builder: (context, snapshot, child) {
+                                        return DropdownButton(
+                                            value: changeAllState.value,
+                                            underline: const SizedBox(),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            focusColor: kBgColor,
+                                            dropdownColor: Colors.white,
+                                            iconEnabledColor: kPcolor1,
+                                            items: ShiftValue.values
+                                                .map(
+                                                  (e) => DropdownMenuItem(
+                                                    value: e,
+                                                    onTap: () {
+                                                      final weekDay = ShiftService
+                                                          .calcWeekDay(
+                                                              selectedWeekState
+                                                                  .value);
 
-                                                  shift.shiftTable!
-                                                      .asMap()
-                                                      .forEach((index, value) {
-                                                    if (value.date!.weekday ==
-                                                        weekDay) {
-                                                      shiftNotifier
-                                                          .changeShiftBlock(
-                                                              index, e);
-                                                    }
-                                                  });
-                                                },
-                                                child: Text(
-                                                  e.typeName,
-                                                  style: kSmallText.copyWith(
-                                                      color: kPcolor1),
-                                                ),
-                                              ),
-                                            )
-                                            .toList(),
-                                        onChanged: (ShiftValue? e) {
-                                          changeAllState.value = e!;
-                                        });
-                                  }),
+                                                      shift.shiftTable!
+                                                          .asMap()
+                                                          .forEach(
+                                                              (index, value) {
+                                                        if (value.date!
+                                                                .weekday ==
+                                                            weekDay) {
+                                                          shiftNotifier
+                                                              .changeShiftBlock(
+                                                                  index, e);
+                                                        }
+                                                      });
+                                                    },
+                                                    child: Text(
+                                                      e.typeName,
+                                                      style:
+                                                          kSmallText.copyWith(
+                                                              color: kPcolor1),
+                                                    ),
+                                                  ),
+                                                )
+                                                .toList(),
+                                            onChanged: (ShiftValue? e) {
+                                              changeAllState.value = e!;
+                                            });
+                                      }),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: Text(
+                                    'にする',
+                                    style: kCaption.copyWith(color: kPcolor1),
+                                  ),
+                                ),
+                              ],
                             ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                              child: Text(
-                                'にする',
-                                style: kCaption.copyWith(color: kPcolor1),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                 )
               : const SizedBox(),

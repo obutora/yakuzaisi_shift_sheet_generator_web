@@ -11,7 +11,6 @@ import 'package:yakuzaisi_shift_sheet_generator_web/provider/shift_provider.dart
 import 'package:yakuzaisi_shift_sheet_generator_web/view/card/content_card.dart';
 import '../view/button/next_button.dart';
 import '../view/text/title_with_marker.dart';
-import '../view/widget/month_selector.dart';
 import '../view/widget/pdf_contents.dart';
 import '../view/widget/shift_selector.dart';
 import '../view/widget/shift_type_selector.dart';
@@ -23,19 +22,21 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final Size size = MediaQuery.of(context).size;
+    bool isMobile = size.width < 500;
     return Scaffold(
       backgroundColor: kBgColor,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+          padding: EdgeInsets.symmetric(horizontal: isMobile ? 20 : 40),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               SizedBox(
-                height: 120,
+                height: isMobile ? 40 : 120,
               ),
-              Center(child: ProgressWidgetSelector()),
-              SizedBox(height: 200),
+              const Center(child: ProgressWidgetSelector()),
+              SizedBox(height: isMobile ? 80 : 200),
             ],
           ),
         ),
@@ -59,7 +60,6 @@ class ProgressWidgetSelectorState
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final shift = ref.watch(shiftProvider);
-    final shiftNotifier = ref.watch(shiftProvider.notifier);
 
     final progress = ref.watch(progressProvider);
     final progressNotifier = ref.watch(progressProvider.notifier);
@@ -74,17 +74,6 @@ class ProgressWidgetSelectorState
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ShiftTypeSelector(shift: shift),
-            shift.isWeek
-                ? const SizedBox()
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      size.width >= 800
-                          ? const SizedBox(width: 400)
-                          : const SizedBox(),
-                      const MonthSelector(),
-                    ],
-                  ),
             const SizedBox(height: 40),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -107,16 +96,16 @@ class ProgressWidgetSelectorState
         key: const ValueKey(1),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const TitleWithMarker(
+          children: const [
+            TitleWithMarker(
                 title: 'シフト表の基本情報を入力してください',
                 description:
                     'シフト表にかかりつけ薬剤師のお名前や、薬局の連絡先を入れることができます。\n緊急時の連絡先情報を患者さんに提供することができます。',
                 iconData: CupertinoIcons.pencil_outline),
-            const SizedBox(height: 28),
-            TextForm(shiftNotifier: shiftNotifier),
-            const SizedBox(height: 40),
-            const BackAndNextButtons(
+            SizedBox(height: 28),
+            TextForm(), //NOTE: 基本情報入力
+            SizedBox(height: 40),
+            BackAndNextButtons(
               backIndex: 0,
               nextIndex: 2,
             ),
@@ -150,7 +139,8 @@ class ProgressWidgetSelectorState
           children: [
             const TitleWithMarker(
                 title: 'シフト表を作成しました',
-                description: 'シフト表を作成しました。\nシフト表を確認して、ダウンロード / 印刷することができます。',
+                description:
+                    'シフト表をダウンロード / 印刷することができます。\nWeeklyタイプは横向き、Monthlyタイプは縦向きで\n綺麗に印刷できます',
                 iconData: CupertinoIcons.gift),
             const SizedBox(height: 40),
             Container(
@@ -168,28 +158,34 @@ class ProgressWidgetSelectorState
             const SizedBox(
               height: 40,
             ),
-            NextButton(
-                title: '画像としてダウンロード',
-                onPressed: () async {
-                  RenderRepaintBoundary? renderObject =
-                      contentKey.currentContext!.findRenderObject()
-                          as RenderRepaintBoundary?;
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: FittedBox(
+                child: NextButton(
+                    title: '画像としてダウンロード',
+                    onPressed: () async {
+                      RenderRepaintBoundary? renderObject =
+                          contentKey.currentContext!.findRenderObject()
+                              as RenderRepaintBoundary?;
 
-                  final image = await renderObject!.toImage(pixelRatio: 6.0);
-                  final byteData =
-                      await image.toByteData(format: ImageByteFormat.png);
+                      final image =
+                          await renderObject!.toImage(pixelRatio: 5.6);
+                      final byteData =
+                          await image.toByteData(format: ImageByteFormat.png);
 
-                  final pngBytes = byteData!.buffer.asUint8List();
-                  final blob =
-                      html.Blob([pngBytes], 'application/octet-stream');
+                      final pngBytes = byteData!.buffer.asUint8List();
+                      final blob =
+                          html.Blob([pngBytes], 'application/octet-stream');
 
-                  html.AnchorElement a = html.AnchorElement(
-                      href: html.Url.createObjectUrlFromBlob(blob));
-                  a.setAttribute('download', 'image.png');
-                  a.click();
+                      html.AnchorElement a = html.AnchorElement(
+                          href: html.Url.createObjectUrlFromBlob(blob))
+                        ..setAttribute('download', 'kakarituke_shift.png')
+                        ..click();
 
-                  // print(base64);
-                }),
+                      // print(base64);
+                    }),
+              ),
+            ),
             const SizedBox(
               height: 28,
             ),

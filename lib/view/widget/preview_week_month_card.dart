@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/provider/shift_provider.dart';
+import 'package:yakuzaisi_shift_sheet_generator_web/view/widget/month_selector.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/view/widget/unit/shift_block.dart';
 
 import '../../const.dart';
@@ -21,11 +22,12 @@ class SelectableViewCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final shift = ref.watch(shiftProvider);
     final shiftNotifier = ref.watch(shiftProvider.notifier);
 
     return LimitedBox(
       maxWidth: 400,
-      maxHeight: 500,
+      maxHeight: 640,
       child: Container(
         padding: const EdgeInsets.all(24),
         margin: const EdgeInsets.all(12),
@@ -50,11 +52,7 @@ class SelectableViewCard extends ConsumerWidget {
 
                     //NOTE: onChangeでProviderにStateを渡すように変更
                     onChanged: (e) {
-                      if (isWeek) {
-                        shiftNotifier.changeIsWeek(true);
-                      } else {
-                        shiftNotifier.changeIsWeek(false);
-                      }
+                      shiftNotifier.changeIsWeek(isWeek);
 
                       //shiftTableの表示を変更
                       shiftNotifier.createShiftTable();
@@ -81,20 +79,15 @@ class SelectableViewCard extends ConsumerWidget {
                 ),
               ],
             ),
-            // const SizedBox(height: 8),
-            // Padding(
-            //   padding: const EdgeInsets.only(left: 8),
-            //   child: Text(
-            //     isWeek ? 'おおまかなシフトが必要なときに！' : 'より確実に会えるシフト表が必要なときに！',
-            //     style: kCaption.copyWith(color: kBlack),
-            //   ),
-            // ),
             Container(
               padding: const EdgeInsets.all(20),
               child: PreviewShiftBlock(
                 isWeek: isWeek,
               ),
             ),
+            !shift.isWeek && !isWeek
+                ? const FittedBox(child: MonthSelector())
+                : const SizedBox(),
           ],
         ),
       ),

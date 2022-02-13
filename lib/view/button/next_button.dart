@@ -83,26 +83,28 @@ class BackAndNextButtons extends ConsumerWidget {
                 ),
               ],
             )
-          : Column(
-              children: [
-                NextButton(
-                  title: '前にもどる',
-                  color: kBgColor,
-                  textColor: kPcolor1,
-                  onPressed: () {
-                    ShiftTextEditingControllers.update(shift);
-                    notifier.change(backIndex);
-                  },
-                ),
-                const SizedBox(height: 28),
-                NextButton(
-                  title: 'つぎへ進む',
-                  onPressed: () {
-                    ShiftTextEditingControllers.update(shift);
-                    notifier.change(nextIndex);
-                  },
-                ),
-              ],
+          : FittedBox(
+              child: Column(
+                children: [
+                  NextButton(
+                    title: '前にもどる',
+                    color: kBgColor,
+                    textColor: kPcolor1,
+                    onPressed: () {
+                      ShiftTextEditingControllers.update(shift);
+                      notifier.change(backIndex);
+                    },
+                  ),
+                  const SizedBox(height: 28),
+                  NextButton(
+                    title: 'つぎへ進む',
+                    onPressed: () {
+                      ShiftTextEditingControllers.update(shift);
+                      notifier.change(nextIndex);
+                    },
+                  ),
+                ],
+              ),
             ),
     );
   }

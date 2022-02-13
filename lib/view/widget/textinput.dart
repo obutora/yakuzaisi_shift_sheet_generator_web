@@ -21,8 +21,10 @@ class StandardTextInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    bool isSmallScreen = size.width < 500;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: EdgeInsets.symmetric(horizontal: isSmallScreen ? 0 : 12),
       child: TextField(
         controller: controller,
         onChanged: (String input) {
@@ -34,6 +36,9 @@ class StandardTextInputField extends StatelessWidget {
           hintText: hintText,
           focusColor: kPcolorTint2,
           fillColor: kPcolor1,
+          hintStyle: isSmallScreen
+              ? kCaption.copyWith(color: kSecoundary2)
+              : kHeading.copyWith(color: kSecoundary2),
           enabledBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: kPcolorTint4, width: 0.5),
           ),
@@ -53,14 +58,11 @@ class StandardTextInputField extends StatelessWidget {
 class TextForm extends ConsumerWidget {
   const TextForm({
     Key? key,
-    required this.shiftNotifier,
   }) : super(key: key);
-
-  final ShiftNotifier shiftNotifier;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final shift = ref.watch(shiftProvider);
+    final shiftNotifier = ref.watch(shiftProvider.notifier);
 
     // final TextEditingController nameController = TextEditingController(text: );
 
@@ -75,7 +77,7 @@ class TextForm extends ConsumerWidget {
             style: kCaption.copyWith(color: kPcolorTint3),
           ),
           StandardTextInputField(
-            hintText: '薬剤 氏名',
+            hintText: 'かかりつけ 薬剤師名',
             controller: ShiftTextEditingControllers.nameEditingController,
             onChanged: (value) => shiftNotifier.changeName(value),
           ),
@@ -85,7 +87,7 @@ class TextForm extends ConsumerWidget {
             style: kCaption.copyWith(color: kPcolorTint3),
           ),
           StandardTextInputField(
-            hintText: 'やくざい しめい',
+            hintText: 'ひらがな or カタカナ',
             controller: ShiftTextEditingControllers.rubyEditingController,
             onChanged: (value) => shiftNotifier.changeRuby(value),
           ),

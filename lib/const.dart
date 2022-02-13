@@ -14,6 +14,7 @@ const Color kPcolorTint7 = Color(0xFFCFE7E2);
 const Color kPcolorTint8 = Color(0xFFE7F3F1);
 
 const Color kSecoundary = Color(0xFFCCCCCC);
+const Color kSecoundary2 = Color(0xFF777777);
 const Color kBlack = Color(0xFF111213);
 const Color kSurface = Color(0xFFF0F0F0);
 

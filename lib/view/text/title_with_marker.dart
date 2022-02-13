@@ -17,6 +17,7 @@ class TitleWithMarker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    bool isSmallScreen = size.width < 500;
 
     return Padding(
       padding: const EdgeInsets.only(left: 12),
@@ -50,7 +51,10 @@ class TitleWithMarker extends StatelessWidget {
             padding: const EdgeInsets.only(left: 8, top: 12),
             child: Text(
               description,
-              style: kCaption.copyWith(color: kBlack, letterSpacing: 1.3),
+              style: kCaption.copyWith(
+                  color: kBlack,
+                  letterSpacing: 1.3,
+                  fontSize: isSmallScreen ? 9 : 12),
             ),
           )
         ],

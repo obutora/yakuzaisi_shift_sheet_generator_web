@@ -22,7 +22,7 @@ class ShiftTypeSelector extends StatelessWidget {
         const TitleWithMarker(
           title: 'シフトタイプを選んでください',
           iconData: CupertinoIcons.calendar,
-          description: '作成できるシフトは2種類あります。\nニーズに合わせたシフトタイプを選んでください🙌',
+          description: '作成できるシフトは2種類あります。\nニーズに合わせたシフトタイプを選んでください。',
         ),
         const SizedBox(height: 12),
         //NOTE : responsive
@@ -45,18 +45,18 @@ class ShiftTypeSelector extends StatelessWidget {
             : Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   SelectableViewCard(
                     title: 'Weeklyタイプ',
                     isWeek: true,
-                    isSelected: true,
+                    isSelected: shift.isWeek,
                   ),
                   SizedBox(
                     width: 440,
                     child: SelectableViewCard(
                       title: 'Monthlyタイプ',
                       isWeek: false,
-                      isSelected: false,
+                      isSelected: !shift.isWeek,
                     ),
                   ),
                 ],
