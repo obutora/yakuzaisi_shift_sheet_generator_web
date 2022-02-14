@@ -122,7 +122,28 @@ class ProgressWidgetSelectorState
                     ? '緑のボタンを押して、シフト表を作成しましょう！'
                     : '緑のボタンを押して、シフトを作成しましょう！\n一括入力を使うことでカンタンにシフトを入力できます。',
                 iconData: CupertinoIcons.briefcase),
-            const SizedBox(height: 28),
+            Container(
+                margin: const EdgeInsets.symmetric(vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                decoration: BoxDecoration(
+                    color: kBgColor.withOpacity(0.6),
+                    borderRadius: BorderRadius.circular(12)),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      CupertinoIcons.info_circle_fill,
+                      color: kPcolor1,
+                    ),
+                    const SizedBox(width: 20),
+                    Text(
+                      'OKと書かれている■をタップすると\nシフトを切り替えることができます。',
+                      style: ksubHeading.copyWith(
+                          color: kPcolorTint2, letterSpacing: 1.6),
+                    ),
+                  ],
+                )),
             ShiftSelector(size: size),
             const SizedBox(height: 40),
             const BackAndNextButtons(backIndex: 1, nextIndex: 3),

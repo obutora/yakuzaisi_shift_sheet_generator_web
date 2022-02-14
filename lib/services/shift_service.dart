@@ -3,7 +3,6 @@ import 'package:yakuzaisi_shift_sheet_generator_web/view/widget/unit/shift_widge
 
 import '../const.dart';
 import '../entity/shift.dart';
-import '../provider/shift_provider.dart';
 import '../view/widget/unit/shift_block.dart';
 
 class ShiftService {
@@ -34,8 +33,12 @@ class ShiftService {
     }
   }
 
-  static List<Widget> widgetSelector(int index, bool isWeek, Shift shift,
-      ShiftNotifier shiftNotifier, bool? isPreview) {
+  static List<Widget> widgetSelector({
+    required int index,
+    required bool isWeek,
+    required Shift shift,
+    required bool isPreview,
+  }) {
     if (index <= 6) {
       return [
         Padding(
@@ -47,7 +50,12 @@ class ShiftService {
         )
       ];
     } else if (isWeek) {
-      return weekShiftWidget(shift, shiftNotifier, index, isPreview);
+      return [
+        WeekShiftWidget(
+          index: index,
+          isPreview: isPreview,
+        )
+      ];
     } else if (index <= 6 + (shift.date.weekday - 1)) {
       return [
         const SizedBox(
@@ -56,8 +64,12 @@ class ShiftService {
         )
       ];
     } else {
-      return monthShiftWidget(
-          shift, shiftNotifier, index, 7 + (shift.date.weekday - 1), isPreview);
+      return [
+        MonthShiftWidget(
+            index: index,
+            minus: 7 + (shift.date.weekday - 1),
+            isPreview: isPreview),
+      ];
     }
   }
 
@@ -65,3 +77,60 @@ class ShiftService {
     return Shift(isWeek: false, date: DateTime(2022, 1, 1));
   }
 }
+
+  //   required Shift shift,
+  //   required ShiftNotifier shiftNotifier,
+  //   SelectedShiftBlock? selectedShiftBlock,
+  //   SelectedShiftBlockNotifier? selectedBlockNotifier,
+
+// class WidgetSelector extends ConsumerWidget {
+//   const WidgetSelector({Key? key,
+//     required int index,
+//     required bool isWeek,
+//     required bool isPreview,
+//   }) : super(key: key);
+
+//   final int index;
+//   final bool isWeek;
+//   final bool? isPreview;
+
+
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     final Shift shift = ref.watch(shiftProvider);
+//     final ShiftNotifier shiftNotifier = ref.watch(shiftProvider.notifier);
+//     final SelectedShiftBlock? selectedShiftBlock = ref.watch(selectedShiftBlockProvider);
+//     final SelectedShiftBlockNotifier? selectedShiftBlockNotifier = ref.watch(selectedShiftBlockProvider.notifier); 
+
+//     if (index <= 6) {
+//       return 
+//         Padding(
+//           padding: const EdgeInsets.only(top: 84),
+//           child: Text(
+//             weekDay(index),
+//             style: kHeading.copyWith(color: kPcolor1),
+//           ),
+//         )
+//       ;
+//     } else if (isWeek) {
+//       return weekShiftWidget(
+//         shift: shift,
+//         shiftNotifier: shiftNotifier,
+//         index: index,
+//         isPreview: isPreview,
+//         selectedShiftBlockNotifier: selectedBlockNotifier,
+//         selectedBlock: selectedShiftBlock,
+//       );
+//     } else if (index <= 6 + (shift.date.weekday - 1)) {
+//       return 
+//         const SizedBox(
+//           width: 100,
+//           height: 100,
+//         )
+//       ;
+//     } else {
+//       return monthShiftWidget(
+//           shift, shiftNotifier, index, 7 + (shift.date.weekday - 1), isPreview);
+//     }
+//   }
+// }

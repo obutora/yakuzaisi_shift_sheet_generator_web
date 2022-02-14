@@ -116,8 +116,12 @@ class PdfContents extends ConsumerWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
-                            children: ShiftService.widgetSelector(index,
-                                shift.isWeek, shift, shiftNotifier, true),
+                            children: ShiftService.widgetSelector(
+                              index: index,
+                              isWeek: shift.isWeek,
+                              shift: shift,
+                              isPreview: true,
+                            ),
                           ),
                         );
                       }),

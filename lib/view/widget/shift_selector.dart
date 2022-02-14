@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/entity/shift.dart';
+import 'package:yakuzaisi_shift_sheet_generator_web/provider/selected_shift_block_provider.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/services/shift_service.dart';
 
 import '../../const.dart';
@@ -21,6 +22,8 @@ class ShiftSelector extends HookConsumerWidget {
     final shift = ref.watch(shiftProvider);
     final shiftNotifier = ref.watch(shiftProvider.notifier);
 
+    final selectedNotifier = ref.watch(selectedShiftBlockProvider.notifier);
+
     late ValueNotifier<String> selectedWeekState = useState('日');
     late ValueNotifier<ShiftValue> changeAllState = useState(ShiftValue.all);
 
@@ -32,7 +35,6 @@ class ShiftSelector extends HookConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 20),
           !shift.isWeek
               ? Center(
                   child: FittedBox(
@@ -110,6 +112,7 @@ class ShiftSelector extends HookConsumerWidget {
                                                 .toList(),
                                             onChanged: (String? e) {
                                               selectedWeekState.value = e!;
+                                              selectedNotifier.changeIndex(32);
                                             });
                                       }),
                                 ),
@@ -173,6 +176,7 @@ class ShiftSelector extends HookConsumerWidget {
                                                 .toList(),
                                             onChanged: (ShiftValue? e) {
                                               changeAllState.value = e!;
+                                              selectedNotifier.init();
                                             });
                                       }),
                                 ),
@@ -213,7 +217,10 @@ class ShiftSelector extends HookConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: ShiftService.widgetSelector(
-                            index, shift.isWeek, shift, shiftNotifier, false)));
+                            index: index,
+                            isWeek: shift.isWeek,
+                            shift: shift,
+                            isPreview: false)));
               }),
         ],
       ),

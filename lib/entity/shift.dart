@@ -27,6 +27,24 @@ extension ShiftValueName on ShiftValue {
     }
   }
 
+  //indexが次のValueを返す
+  ShiftValue get next {
+    switch (this) {
+      case ShiftValue.all:
+        return ShiftValue.am;
+      case ShiftValue.am:
+        return ShiftValue.pm;
+      case ShiftValue.pm:
+        return ShiftValue.holiday;
+      case ShiftValue.holiday:
+        return ShiftValue.close;
+      case ShiftValue.close:
+        return ShiftValue.all;
+      default:
+        return ShiftValue.all;
+    }
+  }
+
   Color get bgColor {
     switch (this) {
       case ShiftValue.all:
