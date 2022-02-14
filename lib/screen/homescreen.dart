@@ -1,13 +1,10 @@
-import 'dart:html' as html;
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/const.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/provider/progress_provider.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/provider/shift_provider.dart';
+import 'package:yakuzaisi_shift_sheet_generator_web/services/convert_image.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/view/card/content_card.dart';
 import '../view/button/next_button.dart';
 import '../view/text/title_with_marker.dart';
@@ -15,6 +12,7 @@ import '../view/widget/pdf_contents.dart';
 import '../view/widget/shift_selector.dart';
 import '../view/widget/shift_type_selector.dart';
 import '../view/widget/textinput.dart';
+import 'dart:html' as html;
 
 class HomeScreen extends ConsumerWidget {
   static const String id = 'HomeScreen';
@@ -161,31 +159,47 @@ class ProgressWidgetSelectorState
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: FittedBox(
-                child: NextButton(
-                    title: '画像としてダウンロード',
-                    onPressed: () async {
-                      RenderRepaintBoundary? renderObject =
-                          contentKey.currentContext!.findRenderObject()
-                              as RenderRepaintBoundary?;
+                child: Column(
+                  children: [
+                    NextButton(
+                        title: '画像としてダウンロード',
+                        onPressed: () async {
+                          final pngBytes =
+                              await ConvertImage.keyToByteImage(contentKey);
+                          final blob = html.Blob([pngBytes], 'image/png');
 
-                      final image =
-                          await renderObject!.toImage(pixelRatio: 5.6);
-                      final byteData =
-                          await image.toByteData(format: ImageByteFormat.png);
+                          // final url = html.Url.createObjectUrlFromBlob(blob);
+                          // html.window.open(
+                          //   url,
+                          //   'かかりつけシフト表',
+                          // );
+                          // html.Url.revokeObjectUrl(url);
 
-                      final pngBytes = byteData!.buffer.asUint8List();
-                      final blob =
-                          html.Blob([pngBytes], 'application/octet-stream');
-
-                      html.AnchorElement a = html.AnchorElement(
-                          href: html.Url.createObjectUrlFromBlob(blob))
-                        ..setAttribute('download', 'kakarituke_shift.png')
-                        ..click();
-
-                      // print(base64);
-                    }),
+                          html.AnchorElement(
+                              href: html.Url.createObjectUrlFromBlob(blob))
+                            // ..setAttribute('download', 'kakarituke_shift.png')
+                            ..download = 'kakarituke_shift.png'
+                            ..click()
+                            ..remove();
+                        }),
+                    const SizedBox(height: 4),
+                    Text(
+                      '5秒ほど待つと、画像が表示されます。\n保存してお使いください。',
+                      style: kCaption.copyWith(color: kSecoundary2),
+                    )
+                  ],
+                ),
               ),
             ),
+            // FutureBuilder(
+            //     future: ConvertImage.keyToByteImage(contentKey),
+            //     builder: (context, AsyncSnapshot<Uint8List?> snapshot) {
+            //       if (snapshot.hasData) {
+            //         return Image.memory(snapshot.data!, fit: BoxFit.cover);
+            //       } else {
+            //         return const CircularProgressIndicator();
+            //       }
+            //     }),
             const SizedBox(
               height: 28,
             ),

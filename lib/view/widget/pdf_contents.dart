@@ -18,6 +18,7 @@ class PdfContents extends ConsumerWidget {
 
     return FittedBox(
       child: Container(
+        color: Colors.white,
         width: shift.isWeek ? 895 : 806,
         height: shift.isWeek ? 620 : 1163,
         padding: const EdgeInsets.all(10),
