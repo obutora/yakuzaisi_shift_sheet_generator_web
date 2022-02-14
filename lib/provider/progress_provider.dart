@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 final progressProvider = StateNotifierProvider(((ref) => ProgressNotifier()));
 
 class ProgressNotifier extends StateNotifier<int> {
-  ProgressNotifier() : super(2);
+  ProgressNotifier() : super(1);
   void change(int e) {
     state = e;
   }

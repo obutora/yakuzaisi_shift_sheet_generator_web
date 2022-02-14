@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:yakuzaisi_shift_sheet_generator_web/provider/selected_svg_provider.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/provider/shift_provider.dart';
+import 'package:yakuzaisi_shift_sheet_generator_web/repo/svg_image_repo.dart';
 
 import '../../const.dart';
 import '../../services/shift_service.dart';
@@ -14,7 +16,8 @@ class PdfContents extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final shift = ref.watch(shiftProvider);
-    final shiftNotifier = ref.watch(shiftProvider.notifier);
+
+    final selectedSvgIndex = ref.watch(selectedSvgProvider);
 
     return FittedBox(
       child: Container(
@@ -60,7 +63,8 @@ class PdfContents extends ConsumerWidget {
                     Positioned(
                       right: 0,
                       child: SvgPicture.asset(
-                        'assets/hero_women.svg',
+                        // 'assets/hero_women.svg',
+                        SvgImageRepo.getPathFromIndex(selectedSvgIndex),
                         width: shift.isWeek ? 160 : 200,
                       ),
                     ),
