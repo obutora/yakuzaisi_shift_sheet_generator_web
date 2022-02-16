@@ -75,7 +75,7 @@ class ProgressWidgetSelectorState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ShiftTypeSelector(shift: shift),
+            const ShiftTypeSelector(), //NOTE: シフトタイプ選択のためのWidget
             const SizedBox(height: 40),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
