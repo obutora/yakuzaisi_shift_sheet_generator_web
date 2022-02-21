@@ -60,30 +60,48 @@ class MonthShiftWidget extends ConsumerWidget {
                 delayInMilliseconds: 0,
                 durationInMilliseconds: 120,
                 moveAmount: 200,
-                child: ClosedSelectableShiftBlock(
-                  shiftValue: shiftValue,
-                  onTap: () {
-                    shiftNotifier.changeShiftBlock(
-                        index - minus, shiftValue.next);
-                    selectedNotifier.changeIndex(index - minus);
-                  },
+                child: Column(
+                  children: [
+                    Text(
+                      '${shift.date.month}/${index - (minus - 1)}',
+                      style: kCaption.copyWith(color: kPcolor1),
+                    ),
+                    const SizedBox(height: 4),
+                    ClosedSelectableShiftBlock(
+                      shiftValue: shiftValue,
+                      onTap: () {
+                        shiftNotifier.changeShiftBlock(
+                            index - minus, shiftValue.next);
+                        selectedNotifier.changeIndex(index - minus);
+                      },
+                    ),
+                  ],
                 ),
               )
-            : ClosedSelectableShiftBlock(
-                shiftValue: shiftValue,
-                onTap: () {
-                  shiftNotifier.changeShiftBlock(
-                      index - minus, shiftValue.next);
-                  selectedNotifier.changeIndex(index - minus);
-                },
+            : Column(
+                children: [
+                  Text(
+                    '${shift.date.month}/${index - (minus - 1)}',
+                    style: kCaption.copyWith(color: kPcolor1),
+                  ),
+                  const SizedBox(height: 4),
+                  ClosedSelectableShiftBlock(
+                    shiftValue: shiftValue,
+                    onTap: () {
+                      shiftNotifier.changeShiftBlock(
+                          index - minus, shiftValue.next);
+                      selectedNotifier.changeIndex(index - minus);
+                    },
+                  ),
+                ],
               );
     // : Column(
     //     children: [
-    //       Text(
-    //         '${shift.date.month}/${index - (minus - 1)}',
-    //         style: kCaption.copyWith(color: kPcolor1),
-    //       ),
-    //       const SizedBox(height: 4),
+    // Text(
+    //   '${shift.date.month}/${index - (minus - 1)}',
+    //   style: kCaption.copyWith(color: kPcolor1),
+    // ),
+    // const SizedBox(height: 4),
     //       PopupMenuButton(
     //         onSelected: (ShiftValue value) {
     //           // print(value);
@@ -275,7 +293,6 @@ class WeekShiftWidget extends HookConsumerWidget {
         ? Container(
             height: 48,
             width: 48,
-            margin: const EdgeInsets.symmetric(horizontal: 4),
             decoration: BoxDecoration(
               color: shiftValue.bgColor,
               borderRadius: BorderRadius.circular(12),
@@ -287,28 +304,33 @@ class WeekShiftWidget extends HookConsumerWidget {
               ),
             ),
           )
-        : selectedBlock.index == (index - 7)
-            ? EasingAnimation(
-                easingDirection: Easing.topIn,
-                curve: Curves.easeOutCirc,
-                delayInMilliseconds: 0,
-                durationInMilliseconds: 120,
-                moveAmount: 200,
-                child: ClosedSelectableShiftBlock(
-                  shiftValue: shiftValue,
-                  onTap: () {
-                    shiftNotifier.changeShiftBlock(index - 7, shiftValue.next);
-                    selectedNotifier.changeIndex(index - 7);
-                  },
-                ),
-              )
-            : ClosedSelectableShiftBlock(
-                shiftValue: shiftValue,
-                onTap: () {
-                  shiftNotifier.changeShiftBlock(index - 7, shiftValue.next);
-                  selectedNotifier.changeIndex(index - 7);
-                },
-              );
+        : Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2),
+            child: selectedBlock.index == (index - 7)
+                ? EasingAnimation(
+                    easingDirection: Easing.topIn,
+                    curve: Curves.easeOutCirc,
+                    delayInMilliseconds: 0,
+                    durationInMilliseconds: 120,
+                    moveAmount: 200,
+                    child: ClosedSelectableShiftBlock(
+                      shiftValue: shiftValue,
+                      onTap: () {
+                        shiftNotifier.changeShiftBlock(
+                            index - 7, shiftValue.next);
+                        selectedNotifier.changeIndex(index - 7);
+                      },
+                    ),
+                  )
+                : ClosedSelectableShiftBlock(
+                    shiftValue: shiftValue,
+                    onTap: () {
+                      shiftNotifier.changeShiftBlock(
+                          index - 7, shiftValue.next);
+                      selectedNotifier.changeIndex(index - 7);
+                    },
+                  ),
+          );
   }
 }
 
@@ -424,6 +446,7 @@ class ClosedSelectableShiftBlock extends StatelessWidget {
       child: Container(
         height: 48,
         width: 48,
+        margin: const EdgeInsets.symmetric(horizontal: 2),
         decoration: BoxDecoration(
           color: shiftValue.bgColor,
           borderRadius: BorderRadius.circular(12),

@@ -26,6 +26,7 @@ class HomeScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: kBgColor,
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: isMobile ? 20 : 40),
           child: Column(
@@ -106,6 +107,7 @@ class ProgressWidgetSelectorState
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: GridView.count(
+                physics: const NeverScrollableScrollPhysics(),
                 crossAxisCount: size.width > 560 ? 2 : 1,
                 childAspectRatio: 1.1,
                 shrinkWrap: true,
@@ -189,28 +191,7 @@ class ProgressWidgetSelectorState
                     ? '緑のボタンを押して、シフト表を作成しましょう！'
                     : '緑のボタンを押して、シフトを作成しましょう！\n一括入力を使うことでカンタンにシフトを入力できます。',
                 iconData: CupertinoIcons.briefcase),
-            Container(
-                margin: const EdgeInsets.symmetric(vertical: 20),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-                decoration: BoxDecoration(
-                    color: kBgColor.withOpacity(0.6),
-                    borderRadius: BorderRadius.circular(12)),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      CupertinoIcons.info_circle_fill,
-                      color: kPcolor1,
-                    ),
-                    const SizedBox(width: 20),
-                    Text(
-                      'OKと書かれている■をタップすると\nシフトを切り替えることができます。',
-                      style: ksubHeading.copyWith(
-                          color: kPcolorTint2, letterSpacing: 1.6),
-                    ),
-                  ],
-                )),
+            const SizedBox(height: 12),
             ShiftSelector(size: size),
             const SizedBox(height: 40),
             const BackAndNextButtons(backIndex: 2, nextIndex: 4),

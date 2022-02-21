@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -28,7 +29,7 @@ class ShiftSelector extends HookConsumerWidget {
     late ValueNotifier<ShiftValue> changeAllState = useState(ShiftValue.all);
 
     return Container(
-      height: shift.isWeek ? 240 : 800,
+      height: shift.isWeek ? 340 : 880,
       width: size.width >= 720 ? 600 : size.width * 0.8,
       padding: const EdgeInsets.all(20),
       decoration: kCardDecoration(),
@@ -222,6 +223,32 @@ class ShiftSelector extends HookConsumerWidget {
                             shift: shift,
                             isPreview: false)));
               }),
+          Center(
+            child: FittedBox(
+              child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 20),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                  decoration: BoxDecoration(
+                      color: kBgColor.withOpacity(0.6),
+                      borderRadius: BorderRadius.circular(12)),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        CupertinoIcons.info_circle_fill,
+                        color: kPcolor1,
+                      ),
+                      const SizedBox(width: 20),
+                      Text(
+                        'OKと書かれている■をタップすると\nシフトを切り替えることができます。',
+                        style: ksubHeading.copyWith(
+                            color: kPcolorTint2, letterSpacing: 1.6),
+                      ),
+                    ],
+                  )),
+            ),
+          ),
         ],
       ),
     );

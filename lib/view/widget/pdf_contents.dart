@@ -16,8 +16,9 @@ class PdfContents extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final shift = ref.watch(shiftProvider);
-
     final selectedSvgIndex = ref.watch(selectedSvgProvider);
+
+    final String svgPath = SvgImageRepo.getPathFromIndex(selectedSvgIndex);
 
     return FittedBox(
       child: Container(
@@ -37,10 +38,15 @@ class PdfContents extends ConsumerWidget {
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
-                    SvgPicture.asset(
-                      'assets/bg_shape.svg',
-                      width: shift.isWeek ? 240 : 320,
-                    ),
+                    svgPath == 'hero_women.svg'
+                        ? SvgPicture.asset(
+                            'assets/bg_shape.svg',
+                            width: shift.isWeek ? 250 : 320,
+                          )
+                        : SizedBox(
+                            height: 240,
+                            width: shift.isWeek ? 240 : 320,
+                          ),
                     Positioned(
                       top: 0,
                       left: 0,
@@ -61,10 +67,11 @@ class PdfContents extends ConsumerWidget {
                       ),
                     ),
                     Positioned(
-                      right: 0,
+                      top: svgPath == 'hero_women.svg' ? 80 : 60,
+                      right: svgPath == 'hero_women.svg' ? 0 : 40,
                       child: SvgPicture.asset(
                         // 'assets/hero_women.svg',
-                        SvgImageRepo.getPathFromIndex(selectedSvgIndex),
+                        svgPath,
                         width: shift.isWeek ? 160 : 200,
                       ),
                     ),

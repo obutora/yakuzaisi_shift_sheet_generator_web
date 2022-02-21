@@ -30,9 +30,10 @@ class ShiftTypeSelector extends ConsumerWidget {
         //NOTE: スクリーンサイズが小さい時はスマホの可能性があるので、caution
         size.width < 600
             ? LimitedBox(
-                maxWidth: 400,
+                maxWidth: 600,
                 child: FittedBox(
                   child: Container(
+                    width: 412,
                     margin: const EdgeInsets.symmetric(
                         horizontal: 12, vertical: 12),
                     padding:
