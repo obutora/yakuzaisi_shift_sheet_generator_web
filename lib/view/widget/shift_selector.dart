@@ -66,7 +66,7 @@ class ShiftSelector extends HookConsumerWidget {
                             style: kCaption.copyWith(color: kPcolor1),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            padding: const EdgeInsets.symmetric(vertical: 4),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
@@ -226,7 +226,7 @@ class ShiftSelector extends HookConsumerWidget {
           Center(
             child: FittedBox(
               child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 20),
+                  margin: const EdgeInsets.symmetric(vertical: 4),
                   padding:
                       const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
                   decoration: BoxDecoration(

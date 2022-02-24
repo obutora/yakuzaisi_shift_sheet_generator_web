@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/const.dart';
+import 'package:yakuzaisi_shift_sheet_generator_web/provider/shift_provider.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/view/button/next_button.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/view/widget/pdf_contents.dart';
 import 'dart:html' as html;
@@ -8,18 +10,19 @@ import '../../provider/progress_provider.dart';
 import '../../services/convert_image.dart';
 import '../text/title_with_marker.dart';
 
-class PreviewResultImageWidget extends StatelessWidget {
+class PreviewResultImageWidget extends ConsumerWidget {
   const PreviewResultImageWidget({
     Key? key,
     required this.contentKey,
-    required this.progressNotifier,
   }) : super(key: key);
 
   final GlobalKey<State<StatefulWidget>> contentKey;
-  final ProgressNotifier progressNotifier;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final progressNotifier = ref.watch(progressProvider.notifier);
+    final shift = ref.watch(shiftProvider);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -66,7 +69,8 @@ class PreviewResultImageWidget extends StatelessWidget {
                       html.AnchorElement(
                           href: html.Url.createObjectUrlFromBlob(blob))
                         // ..setAttribute('download', 'kakarituke_shift.png')
-                        ..download = 'kakarituke_shift.png'
+                        ..download =
+                            'kakarituke_shift_${shift.isWeek ? 'week' : 'month'}${shift.isWeek ? '' : '_' + shift.date.month.toString() + '月'}.png'
                         ..click()
                         ..remove();
                     }),

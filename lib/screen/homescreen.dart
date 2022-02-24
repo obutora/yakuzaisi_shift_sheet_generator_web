@@ -202,7 +202,8 @@ class ProgressWidgetSelectorState
       return ContentCard(
         key: const ValueKey(4),
         child: PreviewResultImageWidget(
-            contentKey: contentKey, progressNotifier: progressNotifier),
+          contentKey: contentKey,
+        ),
       );
     } else {
       return const SizedBox();

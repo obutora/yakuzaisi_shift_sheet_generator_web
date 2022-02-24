@@ -21,11 +21,12 @@ class PdfContents extends ConsumerWidget {
     final String svgPath = SvgImageRepo.getPathFromIndex(selectedSvgIndex);
 
     return FittedBox(
+      fit: BoxFit.fitHeight,
       child: Container(
         color: Colors.white,
         width: shift.isWeek ? 895 : 806,
         height: shift.isWeek ? 620 : 1163,
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment:
@@ -33,7 +34,7 @@ class PdfContents extends ConsumerWidget {
           children: [
             SizedBox(height: shift.isWeek ? 60 : 120),
             Transform.scale(
-              scale: 1.5,
+              scale: 1.4,
               child: Center(
                 child: Stack(
                   alignment: Alignment.center,
@@ -118,8 +119,8 @@ class PdfContents extends ConsumerWidget {
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 7,
                         childAspectRatio: 0.7,
-                        mainAxisSpacing: 4,
-                        mainAxisExtent: 80,
+                        mainAxisSpacing: 8,
+                        mainAxisExtent: 70,
                       ),
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
@@ -196,7 +197,7 @@ class PdfContents extends ConsumerWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 20)
+            const SizedBox(height: 4)
           ],
         ),
       ),
