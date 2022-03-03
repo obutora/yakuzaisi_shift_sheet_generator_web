@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/const.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/provider/shift_provider.dart';
 import 'package:yakuzaisi_shift_sheet_generator_web/view/button/next_button.dart';
@@ -59,20 +60,13 @@ class PreviewResultImageWidget extends ConsumerWidget {
                           await ConvertImage.keyToByteImage(contentKey);
                       final blob = html.Blob([pngBytes], 'image/png');
 
-                      // final url = html.Url.createObjectUrlFromBlob(blob);
-                      // html.window.open(
-                      //   url,
-                      //   'かかりつけシフト表',
-                      // );
-                      // html.Url.revokeObjectUrl(url);
-
                       html.AnchorElement(
                           href: html.Url.createObjectUrlFromBlob(blob))
                         // ..setAttribute('download', 'kakarituke_shift.png')
                         ..download =
                             'kakarituke_shift_${shift.isWeek ? 'week' : 'month'}${shift.isWeek ? '' : '_' + shift.date.month.toString() + '月'}.png'
-                        ..click()
-                        ..remove();
+                        ..click();
+                      // ..remove();
                     }),
                 const SizedBox(height: 4),
                 Text(
@@ -92,7 +86,9 @@ class PreviewResultImageWidget extends ConsumerWidget {
             child: Row(
               children: [
                 NextButton(
-                  title: 'もどる',
+                  title: '前にもどる',
+                  color: kBgColor,
+                  textColor: kPcolor1,
                   onPressed: () {
                     progressNotifier.change(3);
                   },
@@ -101,13 +97,26 @@ class PreviewResultImageWidget extends ConsumerWidget {
                   width: 20,
                 ),
                 NextButton(
-                  title: 'トップへ',
+                  title: 'もう一度作る',
                   onPressed: () {
                     progressNotifier.change(0);
                   },
                 ),
               ],
             ),
+          ),
+        ),
+        const SizedBox(
+          height: 40,
+        ),
+        FittedBox(
+          child: NextButton(
+            color: kBgColor,
+            textColor: kPcolor1,
+            title: 'トップページにもどる',
+            onPressed: () {
+              launch('https://iru-yo.com/');
+            },
           ),
         ),
       ],

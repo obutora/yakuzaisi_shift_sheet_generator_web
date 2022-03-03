@@ -32,7 +32,7 @@ class PdfContents extends ConsumerWidget {
           mainAxisAlignment:
               shift.isWeek ? MainAxisAlignment.center : MainAxisAlignment.start,
           children: [
-            SizedBox(height: shift.isWeek ? 60 : 120),
+            SizedBox(height: shift.isWeek ? 60 : 100),
             Transform.scale(
               scale: 1.4,
               child: Center(
@@ -197,7 +197,7 @@ class PdfContents extends ConsumerWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 4)
+            const SizedBox(height: 20)
           ],
         ),
       ),

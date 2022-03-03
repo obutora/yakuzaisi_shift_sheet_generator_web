@@ -40,6 +40,7 @@ dependencies:
   simple_animations: ^4.0.1
   flutter_svg: ^1.0.3
   pdf: ^3.7.1
+  url_launcher: ^6.0.20
 
 dev_dependencies:
   flutter_test:
