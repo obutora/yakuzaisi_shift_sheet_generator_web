@@ -8,8 +8,8 @@ import 'package:yakuzaisi_shift_sheet_generator_web/repo/svg_image_repo.dart';
 import '../../const.dart';
 import '../../services/shift_service.dart';
 
-class PdfContents extends ConsumerWidget {
-  const PdfContents({
+class DownloadbleImage extends ConsumerWidget {
+  const DownloadbleImage({
     Key? key,
   }) : super(key: key);
 
@@ -73,7 +73,7 @@ class PdfContents extends ConsumerWidget {
                       child: SvgPicture.asset(
                         // 'assets/hero_women.svg',
                         svgPath,
-                        width: shift.isWeek ? 160 : 200,
+                        width: shift.isWeek ? 160 : 180,
                       ),
                     ),
                     Positioned(
@@ -82,15 +82,23 @@ class PdfContents extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            shift.ruby ?? '',
-                            style: kCaption.copyWith(color: kPcolor1),
+                          Container(
+                            padding: const EdgeInsets.all(4),
+                            color: Colors.white.withOpacity(0.8),
+                            child: Text(
+                              shift.ruby ?? '',
+                              style: kCaption.copyWith(color: kPcolor1),
+                            ),
                           ),
-                          Text(
-                            shift.name ?? '',
-                            style: shift.isWeek
-                                ? kMidiumText.copyWith(color: kPcolor1)
-                                : kXLargeText.copyWith(color: kPcolor1),
+                          Container(
+                            padding: const EdgeInsets.all(4),
+                            color: Colors.white.withOpacity(0.8),
+                            child: Text(
+                              shift.name ?? '',
+                              style: shift.isWeek
+                                  ? kMidiumText.copyWith(color: kPcolor1)
+                                  : kXLargeText.copyWith(color: kPcolor1),
+                            ),
                           ),
                         ],
                       ),

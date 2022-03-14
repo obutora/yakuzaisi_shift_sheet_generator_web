@@ -42,7 +42,7 @@ class PreviewResultImageWidget extends ConsumerWidget {
           ),
           child: RepaintBoundary(
             key: contentKey,
-            child: const PdfContents(),
+            child: const DownloadbleImage(),
           ),
         ),
         const SizedBox(

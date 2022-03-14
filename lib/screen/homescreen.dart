@@ -90,7 +90,7 @@ class ProgressWidgetSelectorState
               ],
             ),
             const SizedBox(height: 20),
-            Text('ver.1.1.1', style: kCaption.copyWith(color: kSecoundary2)),
+            Text('ver.1.1.2', style: kCaption.copyWith(color: kSecoundary2)),
           ],
         ),
       );
